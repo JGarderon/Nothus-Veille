@@ -263,9 +263,11 @@ self.Lancer = function () {
                 } 
               }
             }; 
-				  } else {
-					 
-				  }
+				  } else { 
+					  element["actif"] = false; 
+				  } 
+          element["etat"] = "HTTP-"+xhr.status.toString(); 
+          self.db.transaction("flux", "readonly").objectStore("flux").put(element); 
 				} 
 				self.EnCours = false; 
 			}; 

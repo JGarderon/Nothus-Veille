@@ -165,6 +165,16 @@ header ul li a, header ul li a:hover {
 	margin: 0rem 0rem 0.25rem 0rem;
 	color: #4682B4;
 } 
+#resultats article span.suivi { 
+	color: #4682B4; 
+} 
+#resultats article span.suivi:hover { 
+	color: #4682B4; 
+	cursor: pointer;
+} 
+#resultats article span.suivi[suivi="oui"] { 
+	color: #FF4500; 
+} 
 
 #resultats article span.infos * { 
 	color: gray;
@@ -174,6 +184,10 @@ header ul li a, header ul li a:hover {
 	margin: 0rem;
 } 
 #resultats article .date:before { 
+	content: "|"; 
+	margin: 0rem 0.25rem 0rem 0.25rem;
+} 
+#resultats article .compteur:before { 
 	content: "|"; 
 	margin: 0rem 0.25rem 0rem 0.25rem;
 } 

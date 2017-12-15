@@ -170,14 +170,20 @@ function Rechercher_afficher(
 		i<nbreMax 
 	) { 
 		var date = (objArticle.article.pubDate!="")?objArticle.article.pubDate.toLocaleString():""; 
+		if (typeof objArticle.article["vues"]=="undefined") 
+			objArticle.article["vues"] = 0; 
 		var remplacements = { 
-			"infos" : '{{source}}{{date}}{{description}}', 
+			"infos" : '{{source}}{{date}}{{compteurVues}}{{description}}', 
 			"image" : "", 
 			"titre": (objArticle.articleTitre!="")?objArticle.articleTitre:"(pas de titre)", 
 			"lien": objArticle.article.lienPermanent, 
 			"description": (objArticle.articleDescription!="")?'<span class="description">'+objArticle.articleDescription+'</span>':"", 
 			"date": (date!="")?'<span class="date">'+date+'</span>':"", 
-			"ordre": "" 
+			"ordre": "", 
+			"compteurVues": '<span class="compteur">{{vues}}</span>', 
+			"vues": objArticle.article["vues"].toString()+" vue"+((objArticle.article["vues"]>1)?"s":""), 
+			"suivi": (objArticle.article.suivi)?"oui":"non", 
+			"id": objArticle.id 
 		}; 
 		if (objArticle.article.image!="") {
 			remplacements["image"] = '<span class="image" style="background-image:url({{imageURL}})"></span>'; 
@@ -195,6 +201,22 @@ function Rechercher_afficher(
 				elGab, 
 				remplacements, 
 				(element) => { 
+					element.getElementsByTagName("a")[0].addEventListener( 
+						"click", 
+						gerer_bouton_articleVues 
+					); 
+					var spans = element.getElementsByTagName("span"); 
+					for(var i=0; i<spans.length; i++) { 
+						switch(spans[i].getAttribute("class")) { 
+							case "suivi": 
+								spans[i].addEventListener( 
+									"click", 
+									gerer_bouton_articleSuivi 
+								); 
+								break; 
+						}
+							
+					} 
 					return element; 
 				} 
 			) 
@@ -276,7 +298,7 @@ function Rechercher(
 				Gabarit(
 					Gabarit_retrouver("formatResultatsNbre"), 
 					{
-						"nbreResultats": window.Resultats.length.toString()+" article(s) trouvé(s)" 
+						"nbreResultats": (window.Resultats.length+i).toString()+" article(s) trouvé(s)" 
 					}, 
 					(element) => {
 						return element; 
@@ -287,8 +309,63 @@ function Rechercher(
 			Chargement(false); 
 		}
 	}; 
-
 } 
+
+function gerer_bouton_articleVues(evtBouton) { 
+ 	evtBouton.preventDefault(); 
+ 	browser.tabs.create({
+		url: evtBouton.target.getAttribute("href") 
+	}); 
+	var objStockageArticles = window.db.transaction(
+		"articles", 
+		"readwrite" 
+	).objectStore( 
+		"articles" 
+	)
+	objStockageArticles.get(
+		parseInt(evtBouton.target.getAttribute("articleId")) 
+	).onsuccess = (evtBDD) => { 
+		var objArticle = evtBDD.target.result; 
+		objArticle.article["vues"] = objArticle.article["vues"] || 0; 
+		objArticle.article["vues"]++; 
+		evtBouton.target.parentElement.parentElement.parentElement.getElementsByTagName( 
+			"span"
+		)[1].getElementsByTagName( 
+			"span" 
+		)[3].innerHTML = (objArticle.article["vues"].toString()+" vue"+((objArticle.article["vues"]>1)?"s":"")); 
+		objStockageArticles.put(objArticle); 
+	} 
+}
+
+function gerer_bouton_articleSuivi(evtBouton) {
+	var b = evtBouton.target; 
+	var articleEl = b.parentElement.parentElement.parentElement; 
+	articleEl.style.opacity = 0.25; 
+	var objStockageArticles = window.db.transaction(
+		"articles", 
+		"readwrite" 
+	).objectStore( 
+		"articles" 
+	); 
+	objStockageArticles.get( 
+		parseInt( 
+			b.getAttribute("articleId") 
+		) 
+	).onsuccess = (evtBDD) => { 
+		var articleComplet = evtBDD.target.result; 
+		articleComplet.article.suivi = (b.getAttribute("suivi")=="oui")?false:true; 
+		objStockageArticles.put( 
+			articleComplet 
+		).onsuccess = () => { 
+			articleEl.style.opacity = 1; 
+			b.setAttribute( 
+				"suivi", 
+				(b.getAttribute("suivi")=="oui")?"non":"oui" 
+			); 
+		}; 
+	}; 
+	
+}
 
 function gerer_bouton_Ajouter(el) { 
 	var form = el.getElementsByTagName("form")[0]; 
@@ -530,8 +607,11 @@ function gerer_lien_fluxNettoyer() {
 	r.onsuccess = (evt) => { 
 		var articles = evt.target.result; 
 		for(var i=0; i<articles.length; i++) { 
-			if (!articles[i].suivi) {
-				objStockage.delete(articles[i].id); 
+			console.log(articles[i].article.suivi); 
+			if (!articles[i].article.suivi) {
+				objStockage.delete( 
+					articles[i].id 
+				); 
 				y++; 
 			} 
 		} 
@@ -605,7 +685,6 @@ window.addEventListener(
 			console.log("!log: base de données ouverte"); 
 			Sources_Maj(
 				() => { 
-					console.log(window.Sources); 
 					gerer_liens_MenuG(); 
 					window.elEtat = document.getElementById("resultats_etat"); 
 					window.elAjouter = document.getElementById("ajouter"); 
