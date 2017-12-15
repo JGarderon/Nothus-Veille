@@ -2,7 +2,7 @@
     "manifest_version": 2,
     "name": "Nothus-Veille",
     "description": "Outil d'aide à la veille.",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "homepage_url": "https://github.com/JGarderon/Nothus-Veille",
     "icons": {
         "48": "logo.png"
@@ -27,7 +27,8 @@
     "permissions": [
         "storage", 
         "tabs", 
-        "webRequest",
+        "webRequest", 
+        "downloads", 
         "<all_urls>" 
     ]  
 

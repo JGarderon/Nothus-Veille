@@ -21,7 +21,9 @@ self.fluxInitiaux = [
     "url":"https://www.francetvinfo.fr/titres.rss", 
     "actif": true 
   }
-];
+]; 
+
+self.Taches = []; 
 
 self.Interval = localStorage.getItem("interval") || 60000; 
 self.IntervalId = 0; 
@@ -50,6 +52,13 @@ function Creer(evt) {
       autoIncrement : true 
     }
   ); 
+  objStockage_journal.add({
+    "type": "information",  
+    "niveau": 9, 
+    "code": "module.installation", 
+    "message": "Installation d'une version et lancement initial du module", 
+    "date": new Date().toUTCString() 
+  }); 
   var objStockage_options = db.createObjectStore( 
     "options", 
     { 
@@ -57,18 +66,10 @@ function Creer(evt) {
       autoIncrement : true 
     }
   ); 
-  objStockage_options.transaction.oncomplete = function(event) { 
-    var objStockage_options = db.transaction( 
-      "options", 
-      "readwrite"
-    ).objectStore( 
-      "options" 
-    );
-    objStockage_flux_ajout.add({ 
-      "id": "general", 
-      "interval": 60000 
-    }); 
-  } 
+  objStockage_options.add({ 
+    "id": "general", 
+    "interval": 60000 
+  }); 
   var objStockage_flux = db.createObjectStore( 
     "flux", 
     { 
@@ -128,10 +129,42 @@ function Creer(evt) {
   ); 
 }
 
+/*--- Journal de bord ---*/ 
+
+self.Journal = null; 
+function Journal_ouvrir() { 
+  self.Journal = self.db.transaction( 
+    "journal", 
+    "readwrite" 
+  ).objectStore( 
+    "journal" 
+  ); 
+}
+
+function Journaliser(type, niveau, code, message) { 
+  type = type || "inconnu"; 
+  niveau = niveau || 0; 
+  niveau = parseInt(niveau); 
+  code = code || "evenement"; 
+  message = message || "Aucun message associé."; 
+  date = new Date().toUTCString(); 
+  self.Journal.add({
+    "type": type, 
+    "niveau": niveau, 
+    "code": code, 
+    "message": message, 
+    "date": date 
+  }); 
+} 
+
+/*---*/ 
+
 var r = self.indexedDB.open("Nothus-RSS"); 
 r.onupgradeneeded = Creer; 
 r.onsuccess = function(event) {
   self.db = event.target.result; 
+  Journal_ouvrir(); 
+  Journaliser("information", 0, "module.demarrage", "Démarrage du script d'arrière plan"); 
   var r_options = self.db.transaction( 
     "options", 
     "readwrite"
@@ -141,17 +174,32 @@ r.onsuccess = function(event) {
   r_options.onsuccess = function(evtBDD) { 
     var optionsG = evtBDD.target.result; 
     self.EnCours = false; 
-    self.Lancer(); 
+    self.Taches.push(
+      self.Lancer 
+    ); 
     self.IntervalId = setInterval(
-      self.Lancer, 
+      () => { 
+        for(var i=0; i<self.Taches.length; i++) { 
+          try { 
+            self.Taches[i](); 
+          } catch(e) { 
+            console.log( 
+              "!err: tache n°"+i.toString()+" : "+e.message 
+            ); 
+          } 
+        } 
+      }, 
       self.Interval 
     );  
   } 
   r_options.onerror = function() { 
+    Journaliser("erreur fatale", 9, "module.demarrage", "Les options générales n'ont pas pu être chargée"); 
     alert("Erreur fatale : merci de réinstaller le module, sa configuration est défectueuse"); 
     console.log("Erreur fatale : merci de réinstaller le module, sa configuration est défectueuse"); 
   }; 
 }; 
+
+/*---*/ 
 
 function Poursuite(etat) { 
   if (typeof etat!="undefined") 
@@ -162,7 +210,16 @@ function Poursuite(etat) {
 function detecter_cdata(texte) { 
   var r = new RegExp(/^\<\!\[CDATA\[(.*)\]\]\>$/i).exec(texte); 
   r = (r!=null)?r[1]:texte; 
-  return r.replace(/<[^>]*>/g,""); 
+  return r.replace( 
+    "&lt;",
+    "<" 
+  ).replace( 
+    "&gt;", 
+    ">" 
+  ).replace( 
+    /<[^>]*>/g,
+    "" 
+  ); 
 }
 
 function Article_recuperer_RSS(article) { 

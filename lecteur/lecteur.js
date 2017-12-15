@@ -595,6 +595,19 @@ function gerer_lien_fluxModifier() {
 			Chargement(false); 
 		} 
 	}; 
+
+	// Exporter OPML 
+	var opmlForms = document.getElementById("opml").getElementsByTagName("form"); 
+	opmlForms[0].addEventListener( 
+		"submit", 
+		(evt) => { 
+			evt.preventDefault(); 
+			ExporterOPML( 
+				window.db 
+			); 
+		} 
+	); 
+
 } 
 
 function gerer_lien_fluxNettoyer() { 

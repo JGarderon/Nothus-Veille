@@ -198,7 +198,7 @@ header ul li a, header ul li a:hover {
 } 
 
 
-#resultats section#ajouterFlux *, #resultats section#modifierFlux * { 
+#resultats section#ajouterFlux *, #resultats section#modifierFlux * , #resultats section#opml * { 
 	display: block; 
 	color: gray; 
 	background: white; 
