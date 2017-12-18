@@ -185,6 +185,15 @@ function Rechercher_afficher(
 			"suivi": (objArticle.article.suivi)?"oui":"non", 
 			"id": objArticle.id 
 		}; 
+		if (typeof objArticle["imageBlob"]!="undefined")
+			objArticle.article.image = URL.createObjectURL( 
+				new Blob( 
+					[objArticle["imageBlob"]], 
+					{ 
+						"type": objArticle["imageBlob"].type 
+					} 
+				) 
+			);
 		if (objArticle.article.image!="") {
 			remplacements["image"] = '<span class="image" style="background-image:url({{imageURL}})"></span>'; 
 			remplacements["imageURL"] = objArticle.article.image; 

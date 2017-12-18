@@ -1,9 +1,31 @@
 
-function ImporterOPML(BDD) { 
-
-
+function ImporterOPML(texte, BDD) { 
+	var _fct = (elP, flux) => { 
+		flux = flux || []; 
+		for (var i=0; i<elP.children.length; i++) { 
+			if (elP.children[i].hasAttribute("xmlUrl")) { 
+				var attributs = elP.children[i].attributes; 
+				var atts = { 
+					"$type": "flux", 
+				}; 
+				for(var i=0; i<attributs.length; i++) { 
+					atts[attributs[i].name] = attributs[i].value; 
+				} 
+				flux.push(atts); 
+			} 
+			if (elP.children[i].children.length>0) 
+				ParcoursSimple(elP.children[i], flux); 
+		} 
+		return flux; 
+	}; 
+	var doc = new window.DOMParser().parseFromString( 
+		texte, 
+		"text/xml" 
+	);
+	var flux = _fct( 
+		doc.getElementsByTagName("body")[0] 
+	); 
 } 
-
 
 function ExporterOPML(BDD) { 
 	Chargement(true); 
@@ -72,3 +94,55 @@ function ExporterOPML(BDD) {
 		} 
 	}; 
 }
+
+
+/*function ParcoursSimple(elP, flux) { 
+	flux = flux || []; 
+	for (var i=0; i<elP.children.length; i++) { 
+		if (elP.children[i].hasAttribute("xmlUrl"))
+			flux.push( 
+				{ 
+					"_type": "flux", 
+					"type": elP.children[i].getAttribute("type"), 
+					"titre": elP.children[i].getAttribute("title"), 
+					"description": elP.children[i].getAttribute("description"), 
+					"version": elP.children[i].getAttribute("version"), 
+					"langue": elP.children[i].getAttribute("language"), 
+					"siteUrl": elP.children[i].getAttribute("htmlUrl"), 
+					"url": elP.children[i].getAttribute("xmlUrl"), 
+					"texte": elP.children[i].getAttribute("text") 
+				} 
+			); 
+		if (elP.children[i].children.length>0) 
+			ParcoursSimple(elP.children[i], flux); 
+	} 
+	return flux; 
+}
+
+function ParcoursComplexe(elP, hierarchie) { 
+	hierarchie = hierarchie || []; 
+	for (var i=0; i<elP.children.length; i++) { 
+		var item = (elP.children[i].hasAttribute("xmlUrl"))?{ 
+			"_type": "flux", 
+			"type": elP.children[i].getAttribute("type"), 
+			"titre": elP.children[i].getAttribute("title"), 
+			"description": elP.children[i].getAttribute("description"), 
+			"version": elP.children[i].getAttribute("version"), 
+			"langue": elP.children[i].getAttribute("language"), 
+			"siteUrl": elP.children[i].getAttribute("htmlUrl"), 
+			"url": elP.children[i].getAttribute("xmlUrl"), 
+			"texte": elP.children[i].getAttribute("text") 
+		}:{ 
+			"_type": "categorie", 
+			"texte": elP.children[i].getAttribute("text") 
+		}; 
+		if (elP.children[i].children.length>0) 
+			item["_enfants"] = ParcoursComplexe( 
+				elP.children[i] 
+			); 
+		hierarchie.push(
+			item 
+		); 
+	} 
+	return hierarchie; 
+} */
