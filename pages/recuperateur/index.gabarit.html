@@ -1,0 +1,40 @@
+<!-- GABARIT - recuperateur --><!DOCTYPE html>
+<html lang="fr">
+<head>
+	<meta charset="utf-8">
+	<title>Nothus-Veille - aide et documentation</title>
+	<link href="./pages/recuperateur/page.css" rel="stylesheet" type="text/css" />
+	<script type="text/javascript" src="./pages/recuperateur/page.js"></script> 
+</head>
+<body> 
+
+<div id="page"> 
+
+	<h1>Les flux détectés en attente de validation</h1> 
+	<p>Les flux ci-dessous ont été automatiquement détectés lorsque vous avez utilisé votre navigateur pour parcourir Internet. Le module vous propose de les ajouter (ou non !), à la liste des flux qui doivent être récupérées automatiquement.</p> 
+
+	<div id="liste_flux"></div> 
+
+</div> 
+
+<style type="text/html" gabarit="confirmerFlux"> 
+	<form> 
+		<span class="resultat"></span> 
+		<fieldset> 
+			<legend align="center">titre du flux</legend> 
+			<input type="text" name="fluxTitre" value="{{titre}}" style="color: black;" /> 
+		</fieldset>
+		<fieldset> 
+			<legend align="center">URL de la ressource RSS</legend>
+			<input type="url" name="fluxURL" value="{{url}}" style="color: black;" /> 
+		</fieldset> 
+		<fieldset> 
+			<legend align="center">page d'origine du flux</legend>
+			<input type="text" value="{{origine}}" /> 
+		</fieldset> 
+		<input type="submit" value="s'abonner au flux" /> 
+	</form> 
+</style> 
+
+</body>
+</html> 

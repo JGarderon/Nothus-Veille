@@ -1,0 +1,31 @@
+body { 
+	background: white; 
+} 
+
+#page { 
+	display: block; 
+	width: 100%;
+	max-width: 35rem; 
+	margin: auto;
+	padding: 2rem; 
+	text-align: justify; 
+} 
+
+#page h1 { 
+	margin: 0rem;
+	padding: 0rem; 
+} 
+
+#page h1+p { 
+	margin: 1rem 0rem 1rem 0rem;
+	padding: 1rem;
+	border-top: dashed 1px #FF4500;
+	border-bottom: dashed 1px #FF4500;
+} 
+
+#page h3 { 
+	width: 100%;
+	max-width: 30rem; 
+	margin: auto;
+	color: #FF4500; 
+} 

@@ -1,0 +1,150 @@
+<!-- GABARIT - lecteur et recherche de flux --><!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Nothus-Veille - lecteur de flux RSS</title>
+<link href="./pages/lecteur/page.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="./modules/favorissync.module.js"></script> 
+<script type="text/javascript" src="./modules/opml.module.js"></script> 
+<script type="text/javascript" src="./pages/lecteur/page.js"></script> 
+</head>
+<body> 
+
+<div id="page"> 
+
+	<div id="colonne_gauche"> 
+		<section id="menu_page"> 
+			<h3>options de page</h3> 
+			<ul> 
+				<li> 
+					<a href="#" action="gerer_lien_fluxMaJ">récupérer les nouveaux articles</a> 
+				</li>
+				<li> 
+					<a href="#" action="gerer_lien_fluxModifier">modifier les flux</a> 
+				</li>
+			</ul> 
+		</section> 
+		<section id="recherche"> 
+			<form> 
+				
+				<h3>prêt ?</h3> 
+				<input type="submit" value="accéder aux résultats" /> 
+				
+				<h3>filtre / dates</h3> 
+				<label>début</label> 
+				<input type="datetime-local" name="date_debut" pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}\s[0-9]{2}:[0-9]{2}" /> 
+				<label>fin</label> 
+				<input type="datetime-local" name="date_fin" />
+				
+				<h3>filtre / mots-clé</h3> 
+				<label>expression à rechercher</label> 
+				<input type="text" name="expression" /> 
+				<label>(expReg) compiler l'expression</label> 
+				<input type="checkbox" name="expression_reguliere" /> 
+				<label>(expReg) insensibilité de la casse</label> 
+				<input type="checkbox" name="expression_reguliereIM" /> 
+				
+				<h3>filtre / sources</h3> 
+				<label>restreindre à certains flux</label> 
+				<input type="checkbox" name="flux_restreindre" checked /> 
+				<label>flux RSS disponibles</label> 
+				<select multiple name="flux_options"></select> 
+				
+			</form> 
+		</section> 
+	</div> 
+
+	<div id="colonne_droite"> 
+
+		<section id="resultats_etat"></section> 
+
+		<section id="resultats"></section> 
+
+		<section id="ajouter">
+			<form> 
+				<input type="submit" value="+" /> 
+			</form> 
+		</section> 
+
+	</div> 
+
+</div> 
+
+<style type="text/html" gabarit="formatResultatsNbre"> 
+	<h1>{{nbreResultats}}</h1> 
+</style> 
+
+<style type="text/html" gabarit="optionsFlux"> 
+	<section id="ajouterFlux"> 
+		<h1>Ajouter un flux</h1> 
+		<form> 
+			<span class="resultat"></span> 
+			<label>nom du flux</label> 
+			<input type="text" name="fluxNom" style="color: black;" /> 
+			<label>URL de la ressource RSS</label>
+			<input type="url" name="fluxURL" style="color: black;" /> 
+			<label>Une fois enregistré, le flux est immédiatement actif à la récupération</label>
+			<input type="submit" value="enregistrer" /> 
+		</form> 
+	</section> 
+	<section id="modifierFlux"> 
+		<h1>Modifier les flux existants</h1> 
+		<p class="description"> 
+			Vous pouvez désactiver les flux pour ne plus les récupérer. Vous pouvez également supprimer le flux en cochant la case "flux à supprimer" : les articles associés ne seront pas supprimés.
+		</p>
+		<div class="liste"></div> 
+	</section> 
+	<section id="opml"> 
+		<h1>Exporter les flux enregistrés</h1> 
+		<p class="description"> 
+			En fonction du nombre de flux présents dans votre base, cette action peut prendre un peu de temps. Ne fermez pas la page avant le démarrage du téléchargement ! 
+		</p> 
+		<form> 
+			<input type="submit" value="préparer le fichier OPML au téléchargement" /> 
+		</form>
+		<h1>Importer des flux</h1> 
+		<p class="description"> 
+			Cette fonctionnalité est encore en cours de développement. 
+		</p> 
+	</section> 
+</style> 
+
+<style type="text/html" gabarit="modifierFlux"> 
+	<form> 
+		<span class="resultat"></span> 
+		<input type="hidden" name="fluxId" value="{{id}}" s/> 
+		<label>nom du flux</label> 
+		<input type="text" name="fluxNom" value="{{nom}}" style="color: black;" /> 
+		<label>URL de la ressource RSS</label>
+		<input type="url" name="fluxURL" value="{{url}}" style="color: black;" /> 
+		<label>flux actif</label>
+		<input type="checkbox" name="fluxActif" {{actif}} /> 
+		<label>flux à supprimer</label>
+		<input type="checkbox" name="fluxSuppr" /> 
+		<label>enregistrer les modifications</label>
+		<input type="submit" value="enregistrer" /> 
+	</form> 
+</style> 
+
+<style type="text/html" gabarit="article"> 
+	<article style="order: {{ordre}};">
+		{{image}} 
+		<span class="infos"> 
+			<h1> 
+				<!--span class="favori" favori="{{favori}}" articleId="{{id}}">
+					&#x2605; 
+				</span--> 
+				<span class="suivi" suivi="{{suivi}}" articleId="{{id}}">
+					&#x1F512;
+				</span> 
+				<a href="{{lien}}" target="_blank" articleId="{{id}}"> 
+					{{titre}} 
+				</a> 
+			</h1> 
+			{{infos}} 
+		</span> 
+	</article>
+</script> 
+
+</body>
+</html> 
