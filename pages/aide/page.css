@@ -23,9 +23,40 @@ body {
 	border-bottom: dashed 1px #FF4500;
 } 
 
-#page h3 { 
-	width: 100%;
-	max-width: 30rem; 
-	margin: auto;
-	color: #FF4500; 
+#page .titraille { 
+	margin: 0.25rem auto 0.25rem auto; 
+	padding: 0.25rem; 
+	color: rgba(30, 45, 59, 1); 
+} 
+#page .titraille h1 { 
+	vertical-align: top; 
+	text-align: left; 
+	margin: 0rem;
+	padding: 0rem; 
+} 
+#page .titraille .interrogation { 
+	display: inline-block; 
+	width: 1.75rem;
+	height: 1.75rem; 
+	margin-top: -0.25rem;
+	vertical-align: middle; 
+	border: solid 0.15rem transparent; 
+	border-radius: 100%; 
+	font-size: 80%; 
+	text-align: center; 
+	line-height: 110%; 
+	color: #fff; 
+	background: rgba(30, 45, 59, 1); 
+	transform: rotate(15deg);
+} 
+#page .titraille .interrogation:hover { 
+	cursor: pointer; 
+	background: #FF4500; 
+	transform: rotate(0deg);
+} 
+#page .titraille .texte { 
+	display: none; 
+	padding: 0rem; 
+	font-size: 90%; 
+	font-style: italic;
 } 

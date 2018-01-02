@@ -11,6 +11,24 @@ body {
 	color: #FF4500; 
 } 
 
+*[etat=correct] { 
+	display: block; 
+	margin-bottom: 0.25rem; 
+	padding: 0.25rem; 
+	opacity: 0.75; 
+	color: #fff; 
+	background: #556B2F; 
+} 
+
+*[etat=incorrect] { 
+	display: block; 
+	margin-bottom: 0.25rem; 
+	padding: 0.25rem; 
+	opacity: 0.75; 
+	color: #fff; 
+	background: #B22222; 
+} 
+
 #page { 
 	display: block; 
 	width: 100%;
@@ -20,29 +38,13 @@ body {
 	text-align: justify; 
 } 
 
-#page h1 { 
-	margin: 0rem;
-	padding: 0rem; 
-} 
-
-#page h1+p { 
-	margin: 1rem 0rem 1rem 0rem;
-	padding: 1rem;
-	border-top: dashed 1px #FF4500;
-	border-bottom: dashed 1px #FF4500;
-} 
-
-#page h3 { 
-	width: 100%;
-	max-width: 30rem; 
-	margin: auto;
-	color: #FF4500; 
-} 
-
 #page form { 
 	padding: 0.25rem;
 	text-align: center; 
 	border: solid 0.05rem rgba(0, 0, 0, 0.25); 
+} 
+#page form+form { 
+	margin-top: 0.25rem; 
 } 
 
 fieldset { 
@@ -72,4 +74,42 @@ fieldset legend {
 	font-size: 80%; 
 	color: #fff; 
 	background: rgba(0, 0, 0, 0.75);
+} 
+
+#page .titraille { 
+	margin: 0.25rem auto 0.25rem auto; 
+	padding: 0.25rem; 
+	color: rgba(30, 45, 59, 1); 
+} 
+#page .titraille h1 { 
+	vertical-align: top; 
+	text-align: left; 
+	margin: 0rem;
+	padding: 0rem; 
+} 
+#page .titraille .interrogation { 
+	display: inline-block; 
+	width: 1.75rem;
+	height: 1.75rem; 
+	margin-top: -0.25rem;
+	vertical-align: middle; 
+	border: solid 0.15rem transparent; 
+	border-radius: 100%; 
+	font-size: 80%; 
+	text-align: center; 
+	line-height: 110%; 
+	color: #fff; 
+	background: rgba(30, 45, 59, 1); 
+	transform: rotate(15deg);
+} 
+#page .titraille .interrogation:hover { 
+	cursor: pointer; 
+	background: #FF4500; 
+	transform: rotate(0deg);
+} 
+#page .titraille .texte { 
+	display: none; 
+	padding: 0rem; 
+	font-size: 80%; 
+	font-style: italic;
 } 

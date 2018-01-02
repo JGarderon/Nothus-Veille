@@ -4,16 +4,56 @@
 	<meta charset="utf-8">
 	<title>Nothus-Veille - aide et documentation</title>
 	<link href="./pages/recuperateur/page.css" rel="stylesheet" type="text/css" />
+	<script type="text/javascript" src="./modules/opml.module.js"></script> 
 	<script type="text/javascript" src="./pages/recuperateur/page.js"></script> 
 </head>
 <body> 
 
 <div id="page"> 
 
-	<h1>Les flux détectés en attente de validation</h1> 
-	<p>Les flux ci-dessous ont été automatiquement détectés lorsque vous avez utilisé votre navigateur pour parcourir Internet. Le module vous propose de les ajouter (ou non !), à la liste des flux qui doivent être récupérées automatiquement.</p> 
+	<div class="titraille">
+		<h1> 
+			<span class="interrogation">?</span> 
+			Les flux détectés en attente de validation 
+		</h1> 
+		<span class="texte"> 
+			<p> 
+				Les flux ci-dessous ont été automatiquement détectés lorsque vous avez utilisé votre navigateur pour parcourir Internet. Le module vous propose de les ajouter (ou non !), à la liste des flux qui doivent être récupérées automatiquement. 
+			</p> 
+		</span> 
+	</div> 
 
-	<div id="liste_flux"></div> 
+	<div id="liste_fluxRecuperation"></div> 
+
+	<div class="titraille">
+		<h1> 
+			<span class="interrogation">?</span> 
+			Exporter ou importer une liste de flux 
+		</h1> 
+		<span class="texte"> 
+			<p> 
+				Le format OPML vous permet d'importer et d'exporter des flux RSS simplement et facilement d'un logiciel à l'autre.<br /> N'oubliez pas que le module s'appuie également sur vos favoris et le dossier "Nothus-Veille Sync/Flux" pour gérer vos flux grâce à Firefox Sync : ceux présents dans ce dossier de favoris seront toujours ajoutés automatiquement à la liste des flux récupérés à chaque démarrage de votre navigateur. 
+			</p> 
+			<p> 
+				<b>Attention !</b> Votre fichier doit contenir les URL de manières absolue. Celles-ci ne peuvent pas commencer par un slash :"/(...)". Les URLs relatives ne seront pas ajoutées. 
+			</p> 
+		</span> 
+	</div> 
+
+	<div id="liste_fluxOutil"> 
+		<span id="liste_fluxOutil_resultats"></span> 
+		<form id="liste_fluxOutil_Export"> 
+			<input type="submit" value="Exporter votre liste actuelle" /> 
+		</form>
+		<form id="liste_fluxOutil_Import"> 
+			<fieldset> 
+				<legend align="center">fichier OPML valide</legend> 
+				<input type="file" name="fluxTitre" /> 
+			</fieldset>
+			<input type="submit" value="Importer une liste à vos flux" /> 
+		</form>
+
+	</div> 
 
 </div> 
 
@@ -32,6 +72,7 @@
 			<legend align="center">page d'origine du flux</legend>
 			<input type="text" value="{{origine}}" /> 
 		</fieldset> 
+		<input type="hidden" name="fluxURL_original" value="{{_url}}" /> 
 		<input type="submit" value="s'abonner au flux" /> 
 	</form> 
 </style> 
