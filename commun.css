@@ -1,3 +1,7 @@
+@viewport {
+   width: device-width; 
+   zoom: 1; 
+}
 
 html, body { 
 	width: 100%; 
@@ -7,9 +11,36 @@ html, body {
 body {  
 	font-size: 12pt;
 	font-family: "Liberation Sans"; 
-	background: rgba(30, 45, 59, 1); 
+	/*background: rgba(30, 45, 59, 1); */ 
+	background: #C0C0C0; 
 	color: rgba(0, 0, 0, 0.75);
 } 
+
+/*--- Lors des chargements partiels et en attente du retour de la BDD ---*/ 
+*[etat] { 
+	opacity: 1; 
+	background: transparent; 
+} 
+*[etat="attente"] { 
+	opacity: 1; 
+	background: #C0C0C0; 
+} 
+*[etat="correct"] { 
+	opacity: 1; 
+	background: #98FB98; 
+} 
+*[etat="incorrect"] { 
+	opacity: 1; 
+	background: #FFC0CB; 
+} 
+
+*[encours="oui"] { 
+	opacity: 0.25; 
+} 
+*[encours="non"] { 
+	opacity: 1; 
+} 
+/*---*/ 
 
 a { 
 	color: #4682B4; 
@@ -39,7 +70,8 @@ header h1 {
 	text-shadow: 0 0 0.5rem rgba(30, 45, 59, 1); 
 	background: #FF4500; 
 	border-bottom-left-radius: 1rem; 
-	border: solid 1px rgba(255, 255, 255, 0.75);
+	border: solid 1px rgba(255, 255, 255, 0.75); 
+	cursor: pointer; 
 } 
 header ul { 
 	display: inline-block; 
@@ -50,16 +82,20 @@ header ul li {
 	display: inline-block; 
 	margin: auto;
 	padding: 0.25rem 0.25rem 0.25rem 0.25rem; 
-	background: #FF4500; 
+	background: transparent;
 } 
 header ul li+li { 
 	margin: 0rem 0.25rem 0rem 0.25rem;
 } 
-header ul li a, header ul li a:hover { 
-	font-variant: small-caps; 
+header ul li a { 
+	/*font-variant: small-caps; */ 
 	color: #fff; 
 	font-weight: 100; 
 } 
+header ul li a:hover { 
+	color: #FF4500; 
+	font-weight: 100; 
+}
 
 #page { 
 	display: flex; 
@@ -93,6 +129,13 @@ header ul li a, header ul li a:hover {
 } 
 
 
+/*--- Correctifs navigateur ---*/ 
+input[type="checkbox"] { 
+	box-shadow: 0px 0px 0.25rem white; 
+} 
+/*---*/ 
+
+
 /*--- Chargement ---*/ 
 #chargement { 
 	position: fixed; 
@@ -106,7 +149,7 @@ header ul li a, header ul li a:hover {
 #chargement .message { 
 	display: flex;  
 	width: 100%;
-	max-width: 3rem;
+	max-width: 3rem; 
 	height: 100%;
 	max-height: 3rem;
 	margin: auto; 
@@ -115,6 +158,16 @@ header ul li a, header ul li a:hover {
 	background: orange; 
 	border: solid 1px white;
 } 
+
+#chargement.erreurG { 
+	background: rgba(255,0,0,0.90); 
+} 
+#chargement.erreurG .message { 
+	max-width: 10rem; 
+	animation: none;
+	box-shadow: 0rem 0rem 10px 0.85rem rgba(255,255,255,1); ; 
+} 
+
 @keyframes chargement {
 	50%  {
 		transform: scale(0.5); 
@@ -126,5 +179,46 @@ header ul li a, header ul li a:hover {
 	margin: auto;
 	text-align: center; 
 	color: white;
+} 
+/*---*/ 
+
+
+/*--- Titraille ---*/ 
+#page .titraille { 
+	margin: 0.25rem auto 0.25rem auto; 
+	padding: 0.25rem; 
+	color: rgba(30, 45, 59, 1); 
+} 
+#page .titraille h1 { 
+	vertical-align: top; 
+	text-align: left; 
+	margin: 0rem;
+	padding: 0rem; 
+} 
+#page .titraille .interrogation { 
+	display: inline-block; 
+	width: 1.75rem;
+	height: 1.75rem; 
+	margin-top: -0.25rem;
+	vertical-align: middle; 
+	border: solid 0.15rem transparent; 
+	border-radius: 100%; 
+	font-size: 80%; 
+	text-align: center; 
+	line-height: 110%; 
+	color: #fff; 
+	background: rgba(30, 45, 59, 1); 
+	transform: rotate(15deg);
+} 
+#page .titraille .interrogation:hover { 
+	cursor: pointer; 
+	background: #FF4500; 
+	transform: rotate(0deg);
+} 
+#page .titraille .texte { 
+	display: none; 
+	padding: 0rem; 
+	font-size: 80%; 
+	font-style: italic;
 } 
 /*---*/ 

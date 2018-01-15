@@ -1,0 +1,167 @@
+<!-- GABARIT - lecteur et recherche de flux --><!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Nothus-Veille - lecteur de flux RSS</title>
+<link href="./pages/recherche/page.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="./modules/favorissync.module.js"></script> 
+	<script type="text/javascript" src="./modules/articles.module.js"></script> 
+<script type="text/javascript" src="./pages/recherche/page.js"></script> 
+</head>
+<body> 
+
+<div id="page"> 
+
+	<div class="titraille">
+		<h1> 
+			<span class="interrogation">?</span> 
+			Définir une recherche 
+		</h1> 
+		<span class="texte"> 
+			<p> 
+				Une recherche est un enregistrement de paramètres (<i>dates ; mots-clé ou expression régulière ; secteurs</i>), afin de créer une "vue" de votre fil général d'actualité. C'est-à-dire que vous pouvez pré-enregistrer des paramètres sous un nom unique, utilisable ensuite dans l'outil de lecture, afin de réduire le nombre de résultats aux plus pertinents. 
+			</p> 
+			<p> 
+				Un bref aperçu vous est fourni avant d'enregistrer votre vue : n'hésitez pas à modifier autant de fois que nécessaire votre vue afin de la rendre plus pertinente. L'extraction des données par le lecteur d'article n'en  sera que plus rapide, surtout avec des centaines de flux et des milliers d'articles enregistrés.<br /> 
+				Attention cependant : l'aperçu n'est pas aussi pointue sur l'ordre temporel (pour des questions de performances) que le fera la recherche une fois enregistrée comme une vue active. 
+			</p> 
+			<p> 
+				<b>Comment fonctionne les paramètres de recherche de la vue :</b> les articles sont d'abord extraits de la base, puis trier en fonction des dates, dans l'ordre voulu (temporel ou temporel inverse). A noter que les dates de début et de fin sont des bornes fermées (les dates indiquées sont comprises).<br /> 
+				Un second tri est réalisé lors de l'extraction, afin de vérifier l'appartenance de l'article aux secteurs désirés et si l'expression demandée, a bien été trouvée.<br /> 
+				Enfin les articles restant sont affichés : votre navigateur pourrait vérifier une dernière fois la présentation temporelle des résultats (en fonction de sa configuration). 
+			</p> 
+			<p> 
+				Les dates doivent être au format <b>aaaa-mm-dd HH:MM:SS</b>. Si elles ne sont pas indiquées, la date de fin correspondra à la date d'aujourd'hui (l'heure précise) et la date de début, à une année avant la date de fin (soit 365 jours). 
+			</p> 
+			<p> 
+				Enfin le choix d'aucun secteur pour la vue, entraîne la sélection de l'ensemble des secteurs : plutôt que tous les sélectionner, n'en sélectionnez aucun !<br />
+				Ce comportement permet d'éviter de se retrouver avec des vues "vides" de sens et d'articles. 
+			</p> 
+		</span> 
+	</div> 
+
+	<div id="formulaire"> 
+			<form class="edition"> 
+				
+				<span class="resultat"></span> 
+				
+				<input type="hidden" name="vueId" value="nouveau" /> 
+
+				<fieldset> 
+					<legend>Identifiant de vue</legend> 
+					<span class="ligne"> 
+						<label>Nom de la vue (unique)</label> 
+						<input type="text" name="vueTitre" /> 
+					</span> 
+				</fieldset> 
+				
+				<fieldset> 
+					<legend>Fitrer par dates</legend> 
+					<span class="ligne"> 
+						<label>date de début</label> 
+						<input type="datetime-local" name="vueDateDebut" pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}\s[0-9]{2}:[0-9]{2}" /> 
+					</span> 
+					<span class="ligne"> 
+						<label>date de fin</label> 
+						<input type="datetime-local" name="vueDateFin" pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}\s[0-9]{2}:[0-9]{2}" /> 
+					</span> 
+					<span class="ligne"> 
+						<label>sens temporel inverse</label> 
+						<input type="checkbox" name="vueDateInverse" checked /> 
+					</span> 
+				</fieldset> 
+				
+				<fieldset> 
+					<legend>Restreindre par pertinence</legend> 
+					<span class="ligne"> 
+						<label>Expression à rechercher</label>
+						<input type="text" name="vueExp" /> 
+					</span> 
+					<span class="ligne"> 
+						<label>(expReg) compiler l'expression</label> 
+						<input type="checkbox" name="vueExpReg" /> 
+					</span> 
+					<span class="ligne"> 
+						<label>(expReg) insensibilité de la casse</label> 
+						<input type="checkbox" name="vueExpRegIns" /> 
+					</span> 
+				</fieldset>
+				
+				<fieldset> 
+					<legend>Restreindre à certains secteurs</legend> 
+					<span id="listeSecteurs"></span> 
+				</fieldset> 
+				
+				<fieldset> 
+					<legend>prêt ?</legend> 
+					<span class="ligne"> 
+						<label>(étape 1)</label> 
+						<input type="submit" value="voir l'aperçu de la vue" /> 
+					</span> 
+					<span class="ligne"> 
+						<label>(étape 2)</label>
+						<input type="button" value="enregistrer la vue" /> 
+					</span> 
+				</fieldset> 
+
+			</form> 
+	</div> 
+
+	<div id="resultats"></div> 
+
+	<div class="titraille">
+		<h1> 
+			<span class="interrogation">?</span> 
+			Vue(s) déjà enregistrée(s) 
+		</h1> 
+		<span class="texte"> 
+			<p> 
+				Vous n'êtes pas limités en nombre de vues enregistrées : pour des questions de performances, mieux vaut les multiplier pour afficher pleinement votre recherche, particulièrement si vous avez plusieurs milliers d'articles. 
+			</p> 
+		</span> 
+	</div> 
+
+	<div>
+		<fieldset> 
+			<legend>Cliquez pour éditer</legend> 
+		</fieldset> 
+	</div> 
+
+	<div id="vuesEnregistrees"></div> 
+
+</div> 
+
+<style type="text/html" gabarit="vueItem"> 
+	<a href="?page=recherche" vueId="{{id}}"> 
+		{{titre}} 
+	</a> 
+</style> 
+
+<style type="text/html" gabarit="vueTest"> 
+	<fieldset> 
+		<legend>Prévisualisation des résultats ({{nbre}} / 15 max. extraits)</legend> 
+	</fieldset> 
+</style> 
+
+<style type="text/html" gabarit="jonction"> 
+	<a href="?page=source" vueId="{{vueId}}" secteurId="{{secteurId}}" jonction="non"> 
+		{{secteurTitre}} 
+	</a> 
+</style> 
+
+<style type="text/html" gabarit="vueSuppression"> 
+	<form class="suppression"> 
+		<fieldset> 
+			<legend>Suppression</legend> 
+			<span class="resultat"></span> 
+			<input type="hidden" name="vueId" value="{{vueId}}" /> 
+			<span class="ligne"> 
+				<label>Vue n°{{vueId}}</label> 
+				<input type="submit" value="supprimer la vue" /> 
+			</span> 
+		</fieldset> 
+	</form> 
+</style> 
+
+</body>
+</html> 

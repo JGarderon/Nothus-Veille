@@ -1,0 +1,117 @@
+<!-- GABARIT - outils --><!DOCTYPE html>
+<html lang="fr">
+<head>
+	<meta charset="utf-8">
+	<title>Nothus-Veille - outils avancés</title>
+	<link href="./pages/outils/page.css" rel="stylesheet" type="text/css" />
+	<script type="text/javascript" src="./modules/opml.module.js"></script> 
+	<script type="text/javascript" src="./pages/outils/page.js"></script> 
+</head>
+<body> 
+
+<div id="page"> 
+
+	<div class="titraille">
+		<h1> 
+			<span class="interrogation">?</span> 
+			Exporter ou importer une liste de flux (OPML) 
+		</h1> 
+		<span class="texte"> 
+			<p> 
+				Le format OPML vous permet d'importer et d'exporter des flux RSS simplement et facilement d'un logiciel à l'autre.<br /> N'oubliez pas que le module s'appuie également sur vos favoris et le dossier "Nothus-Veille Sync/Flux" pour gérer vos flux grâce à Firefox Sync : ceux présents dans ce dossier de favoris seront toujours ajoutés automatiquement à la liste des flux récupérés à chaque démarrage de votre navigateur. 
+			</p> 
+			<p> 
+				<b>Attention !</b> Votre fichier doit contenir les URL de manières absolue. Celles-ci ne peuvent pas commencer par un slash :"/(...)". Les URLs relatives ne seront pas ajoutées. 
+			</p> 
+		</span> 
+	</div> 
+
+	<div id="liste_fluxOutil"> 
+		<span id="liste_fluxOutil_resultats"></span> 
+		<form id="liste_fluxOutil_Export"> 
+			<input type="submit" value="Exporter votre liste actuelle" /> 
+		</form>
+		<form id="liste_fluxOutil_Import"> 
+			<fieldset> 
+				<legend align="center">fichier OPML valide</legend> 
+				<input type="file" name="fluxTitre" /> 
+			</fieldset>
+			<input type="submit" value="Importer une liste à vos flux" /> 
+		</form>
+	</div> 
+
+	<div class="titraille">
+		<h1> 
+			<span class="interrogation">?</span> 
+			Insertion en masse de flux (CSV) 
+		</h1> 
+		<span class="texte"> 
+			<p> 
+				Le formulaire ci-dessous vous permet d'ajouter <b>en grand nombre</b> des flux RSS au format CSV. Les colonnes doivent être les suivantes, séparées par des tabulations et sans guillemets : titre du flux, URL absolue du flux, état de récupération (0 ou 1) et état du flux (mettre <i>HTTP-200</i>).
+			</p> 
+			<p> 
+				Attention : si l'outil est prévu pour un grand nombre de flux et n'offre pas de limite en nombre, il est conseillé de ne pas dépasser quelques milliers de flux en récupération. L'outil fonctionne comme un module de votre navigateur et, si le nombre de flux est trop élevé pour celui-ci, des ralentissements notables peuvent se faire sentir.<br /> 
+				Pour éviter aussi des requêtes trop longues à récupérer, vérifier que vos secteurs ne contiennent pas de flux inutiles et que vos recherches sont suffisamment précises. 
+			</p> 
+			<p> 
+				Sur les appareils mobiles, l'espace de stockage peut être limité et un grand nombre de flux peut certes ralentir le navigateur, mais aussi conduire à des incohérences car le navigateur peut, en cas de manque d'espace, supprimer <b>sans vous prévenir</b> des éléments (articles, flux, secteurs...). 
+			</p> 
+		</span> 
+	</div> 
+
+	<div id="CSV_insertion_flux" class="formulaireInsertion"> 
+		<form> 
+			<span class="resultat"></span> 
+			<textarea name="csvFlux" rows="1"></textarea> 
+			<input type="submit" value="Insertion des flux" /> 
+		</form> 
+	</div> 
+
+	<div class="titraille">
+		<h1> 
+			<span class="interrogation">?</span> 
+			Insertion en masse de secteurs (CSV) 
+		</h1> 
+		<span class="texte"> 
+			<p> 
+				Le formulaire ci-dessous vous permet d'ajouter <b>en grand nombre</b> des secteurs au format CSV. Un titre de secteur est autorisé par ligne.<br /> 
+				Les secteurs ne doivent pas avoir plusieurs fois le même nom. 
+			</p> 
+			<p> 
+				<b>N'hésitez pas à multiplier les secteurs</b> afin de classer vos flux. Le module fonctionne mieux lorsque les flux sont bien organisés (requêtes plus rapides notamment). 
+			</p> 
+		</span> 
+	</div> 
+
+	<div id="CSV_insertion_secteurs" class="formulaireInsertion"> 
+		<form> 
+			<span class="resultat"></span> 
+			<textarea name="csvSecteurs" rows="1"></textarea> 
+			<input type="submit" value="Insertion des secteurs" /> 
+		</form> 
+	</div> 
+
+</div> 
+
+<style type="text/html" gabarit="confirmerFlux"> 
+	<form> 
+		<span class="resultat"></span> 
+		<fieldset> 
+			<legend align="center">titre du flux</legend> 
+			<input type="text" name="fluxTitre" value="{{titre}}" style="color: black;" /> 
+		</fieldset>
+		<fieldset> 
+			<legend align="center">URL de la ressource RSS</legend>
+			<input type="url" name="fluxURL" value="{{url}}" style="color: black;" /> 
+		</fieldset> 
+		<fieldset> 
+			<legend align="center">page d'origine du flux</legend>
+			<input type="text" value="{{origine}}" /> 
+		</fieldset> 
+		<input type="submit" value="s'abonner" /> 
+		<input type="button" url="{{url}}" value="l'oublier" /> 
+	</form> 
+</style> 
+
+</body>
+</html> 

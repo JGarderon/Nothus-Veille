@@ -1,33 +1,73 @@
 
-function ImporterOPML(texte, BDD) { 
-	var _fct = (elP, flux) => { 
-		flux = flux || []; 
-		for (var i=0; i<elP.children.length; i++) { 
-			if (elP.children[i].hasAttribute("xmlUrl")) { 
-				var attributs = elP.children[i].attributes; 
-				var atts = { 
-					"$type": "flux", 
-				}; 
-				for(var i=0; i<attributs.length; i++) { 
-					atts[attributs[i].name] = attributs[i].value; 
-				} 
-				flux.push(atts); 
-			} 
-			if (elP.children[i].children.length>0) 
-				ParcoursSimple(elP.children[i], flux); 
-		} 
-		return flux; 
+window = window || self; 
+if (typeof window["Modules"]=="undefined") 
+	window.Modules = {}; 
+
+function ImporterOPML(texte, BDD, _SuiteOk, _SuiteKo) { 
+	window.TMP_import = {
+		"nbreTotal": 0,  
+		"nbreDoublons": 0, 
+		"nbreOk": 0 
 	}; 
 	var doc = new window.DOMParser().parseFromString( 
 		texte, 
 		"text/xml" 
-	);
-	var flux = _fct( 
-		doc.getElementsByTagName("body")[0] 
+	); 
+	if (doc.children[0].tagName=="parsererror") {
+		if (typeof _SuiteKo=="function") 
+			_SuiteKo(); 
+		return; 
+	}
+	var flux = []; 
+	var racinePath = /^\//; 
+	var t = BDD.transaction( 
+		"flux", 
+		"readwrite" 
+	); 
+	t.onerror = (evtBDD) => { evtBDD.preventDefault(); }; 
+	t.oncomplete = (evtBDD) => { 
+		if (typeof _SuiteOk=="function") 
+			_SuiteOk( 
+				window.TMP_import
+			); 
+		delete window.TMP_import; 
+	}; 
+	var EntrepotFlux = t.objectStore( 
+		"flux" 
+	); 
+	doc.querySelectorAll("outline").forEach( 
+		(element) => { 
+			if (element.hasAttribute("xmlUrl")) { 
+				window.TMP_import.nbreTotal++; 
+				var attributs = element.attributes; 
+				var atts = {}; 
+				for(var i=0; i<attributs.length; i++) { 
+					atts[attributs[i].name] = attributs[i].value; 
+				} 
+				if (racinePath.test(atts["xmlUrl"])) 
+					return; 
+				var r = EntrepotFlux.add({ 
+					"site": atts["title"] || atts["text"] || "", 
+					"url": atts["xmlUrl"], 
+					"actif": true, 
+					"etat": "HTTP-200"
+				}); 
+				r.onsuccess = (evtBDD) => { 
+					window.TMP_import.nbreOk++; 
+				}; 
+				r.onerror = (evtBDD) => { 
+					if (evtBDD.target.error.name=="ConstraintError") 
+						window.TMP_import.nbreDoublons++; 
+				}; 
+				
+			} 
+		} 
 	); 
 } 
 
-function ExporterOPML(BDD) { 
+window.ImporterOPML = ImporterOPML; 
+
+function ExporterOPML(BDD, _SuiteOk) { 
 	Chargement(true); 
 	var doc = document.implementation.createDocument( 
 		"", 
@@ -90,7 +130,8 @@ function ExporterOPML(BDD) {
 				"filename" : "Nothus-Veille.opml", 
 				"saveAs": true  
 			}); 
-			Chargement(false); 
+			if (typeof _SuiteOk=="function") 
+				_SuiteOk(); 
 		} 
 	}; 
 }

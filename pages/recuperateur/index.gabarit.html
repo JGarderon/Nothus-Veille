@@ -25,35 +25,21 @@
 
 	<div id="liste_fluxRecuperation"></div> 
 
-	<div class="titraille">
+	<!--div class="titraille">
 		<h1> 
 			<span class="interrogation">?</span> 
-			Exporter ou importer une liste de flux 
+			Le jeu de flux RSS proposés avec le module 
 		</h1> 
 		<span class="texte"> 
 			<p> 
-				Le format OPML vous permet d'importer et d'exporter des flux RSS simplement et facilement d'un logiciel à l'autre.<br /> N'oubliez pas que le module s'appuie également sur vos favoris et le dossier "Nothus-Veille Sync/Flux" pour gérer vos flux grâce à Firefox Sync : ceux présents dans ce dossier de favoris seront toujours ajoutés automatiquement à la liste des flux récupérés à chaque démarrage de votre navigateur. 
-			</p> 
-			<p> 
-				<b>Attention !</b> Votre fichier doit contenir les URL de manières absolue. Celles-ci ne peuvent pas commencer par un slash :"/(...)". Les URLs relatives ne seront pas ajoutées. 
+				Les flux RSS ont été triés et sont rappatriés depuis le site <a href="http://veille.nothus.fr">veille.nothus.fr</a>. La base est mise à jour par les flux RSS automatiquement récupérés (anonymement !) par les utilisateurs du module. Dédoublés, validés (d'un point de vue technique), puis triés par secteur, ils sont à disposition. 
 			</p> 
 		</span> 
 	</div> 
 
-	<div id="liste_fluxOutil"> 
-		<span id="liste_fluxOutil_resultats"></span> 
-		<form id="liste_fluxOutil_Export"> 
-			<input type="submit" value="Exporter votre liste actuelle" /> 
-		</form>
-		<form id="liste_fluxOutil_Import"> 
-			<fieldset> 
-				<legend align="center">fichier OPML valide</legend> 
-				<input type="file" name="fluxTitre" /> 
-			</fieldset>
-			<input type="submit" value="Importer une liste à vos flux" /> 
-		</form>
-
-	</div> 
+	<div> 
+		<a href="?page=maj">accès à la page d'importation des flux</a> 
+	</div--> 
 
 </div> 
 
@@ -72,8 +58,8 @@
 			<legend align="center">page d'origine du flux</legend>
 			<input type="text" value="{{origine}}" /> 
 		</fieldset> 
-		<input type="hidden" name="fluxURL_original" value="{{_url}}" /> 
-		<input type="submit" value="s'abonner au flux" /> 
+		<input type="submit" value="s'abonner" /> 
+		<input type="button" url="{{url}}" value="l'oublier" /> 
 	</form> 
 </style> 
 

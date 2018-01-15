@@ -3,50 +3,74 @@
 <head>
 	<meta charset="utf-8">
 	<title>Nothus-Veille</title> 
-	<link href="./commun.css" rel="stylesheet" type="text/css" />
-	<meta name="description" content="Module de veille RSS pour navigateur Web">
-	<meta name="author" content="Julien Garderon (alias Nothus), France">
+	<link href="./commun.css" rel="stylesheet" type="text/css" /> 
+	<link href="./gabarit.css" rel="stylesheet" type="text/css" /> 
+	<meta name="description" content="Module de veille RSS pour navigateur Web"> 
+	<meta name="author" content="Julien Garderon (alias Nothus), France"> 
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no"> 
 	<script type="text/javascript" src="./commun.js"></script>
+	<script type="text/javascript" src="./modules/articles.module.js"></script> 
 	<script type="text/javascript" src="./modules/pagecalques.module.js"></script>
-	<script type="text/javascript" src="./gabarit.js"></script>
+	<script type="text/javascript" src="./gabarit.js"></script> 
 </head>
 <body> 
 
-<header>
-	<h1>Nothus Veille</h1> 
+<header> 
+	<h1>Nothus-Veille</h1> 
 	<ul> 
 		<li> 
-			<a href="#" page="lecteur">lecteur</a> 
+			<a href="?page=recherche" page="recherche">recherche</a> 
 		</li>
 		<li> 
-			<a href="#" page="recuperateur">récupérateur</a> 
-		</li>
+			<a href="?page=sources" page="sources">sources</a> 
+		</li> 
 		<!--li> 
 			<a href="#" page="options">options</a> 
 		</li-->
 		<li> 
-			<a href="#" page="aide">aide</a> 
+			<a href="?page=aide" page="aide">aide</a> 
 		</li> 
 	</ul> 
 </header> 
 
 <div id="page"> 
 
-	<div id="contenu"> Que désirez-vous faire ?</div> 
+	<div id="statistiques" class="article"> 
+		<ul> 
+			<li> 
+				Statistiques rafraîchies toutes les minutes... 
+			</li> 
+			<li>
+				<span id="nbre_flux">?</span> flux enregistré(s) 
+			</li>
+			<li>
+				<span id="nbre_fluxAttente">?</span> flux en attente de confirmation
+			</li>
+			<li>
+				<span id="nbre_articles">?</span> article(s) récupéré(s) 
+			</li> 
+		</ul> 
+	</div> 
 
-	<!--div id="contenu"> 
+	<div id="articlesListe">
+			<span class="article"> 
+				<article class="menu"> 
+					<p> 
+						Vue actuelle <span id="vueActuelle">par défaut : tous les articles de la base, par ordre chronologique inverse.</span><br /> 
+						<a href="#choixVue">Changer de vue</a> 
+					</p> 
+				</article>
+			</span> 
 
-		<div class="nbreFlux"> 
-			<span id="nbre_flux"></span> flux enregistrés
-		</div> 
-		<div class="nbreFluxAttentes"> 
-			<span id="nbre_fluxAttentes"></span> flux en attente de confirmation
-		</div> 
-		<div class="nbreArticles"> 
-			<span id="nbre_articles"></span> articles récupérés
-		</div> 
+	</div> 
 
-	</div--> 
+	<div id="ajout" class="article">
+		<span>+</span> 
+	</div>
+
+	<div id="choixVue"> 
+		<span class="liste"></span> 
+	</div> 
 
 </div> 
 
@@ -55,6 +79,23 @@
 		<p>Nv</p> 
 	</section> 
 </div> 
+
+<style type="text/html" gabarit="article"> 
+	<article style="order: {{articleDate}}; background: url({{articleImage}}); background-size: cover; background-clip: border-box;"> 
+		<span class="contenu"> 
+			<span class="titre"> 
+				<span class="suivi" suivi="{{articleSuiviEtat}}" articleId="{{id}}">
+					&#9733; 
+				</span> <a href="{{articleLien}}" target="_blank" articleId="{{id}}"> 
+					{{articleTitre}} 
+				</a> 
+			</span> 
+			<span class="infos"> 
+				<span class="source">{{fluxTitre}}</span> <span class="date">{{articleDateAff}}</span> <span class="vues">{{infoVues}}</span> <span class="description">{{articleDescription}}</span> 
+			</span> 
+		</span> 
+	</article>
+</style> 
 
 </body>
 </html> 

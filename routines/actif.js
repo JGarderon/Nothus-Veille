@@ -1,66 +1,4 @@
 
-browser.browserAction.onClicked.addListener(() =>{ 
-	browser.tabs.create({
-		url: "./gabarit.html"
-	});
-});
-
-/*---*/ 
-
-if (self.localStorage.getItem("RSS.flux.temporaires")==null) 
-	self.localStorage.setItem("RSS.flux.temporaires", JSON.stringify({})); 
-
-/*---*/ 
-
-function notifier(titre, message) { 
-    browser.notifications.create({
-        "type": "basic",
-        "iconUrl": browser.extension.getURL("logo.png"),
-        "title": titre,
-        "message": message 
-    });
-} 
-
-function gerer_action_fluxTmpAjouter(items) { 
-	var nbre = 0; 
-	var fluxTmpTous = JSON.parse(self.localStorage.getItem( 
-		"RSS.flux.temporaires" 
-	)); 
-	for(var i=0; i<items.length; i++) { 
-		var flux = items[i]; 
-		if (typeof fluxTmpTous[flux.url]=="undefined") { 
-			fluxTmpTous[flux.url] = flux; 
-			nbre++; 
-		} 
-	} 
-	self.localStorage.setItem( 
-		"RSS.flux.temporaires", 
-		JSON.stringify(fluxTmpTous) 
-	); 
-	return nbre; 
-} 
-
-browser.runtime.onMessage.addListener((message) => { 
-    if (typeof message=="object") 
-        switch(message["type"]) { 
-            default: 
-                break; 
-            case "flux_ajouter": 
-            	var nbre = gerer_action_fluxTmpAjouter(message["items"]); 
-            	if (nbre>0) 
-	                return notifier( 
-	                    "Nothus-Veille - information", 
-	                    (
-	                    	(nbre>1)?nbre.toString():"Un"
-	                    )+" nouveau"+( 
-	                    	(nbre>1)?"x":"" 
-	                    )+" flux RSS découverts !" 
-	                ); 
-                break; 
-        }  
-}); 
-
-/*---*/ 
 
 /*function ExtraireContenuPertinent() { 
 	var priorites = [ 
@@ -113,26 +51,7 @@ if (elC!=false)
 
 /*---*/ 
 
-
-self.fluxInitiaux = [
-	{
-		"site":"lemonde.fr",
-		"url":"http://www.lemonde.fr/rss/une.xml", 
-		"actif": true 
-	}, 
-	{
-		"site":"lefigaro.fr",
-		"url":"http://www.lefigaro.fr/rss/figaro_actualites.xml", 
-		"actif": true 
-	}, 
-	{
-		"site":"bfmtv.com",
-		"url":"https://www.francetvinfo.fr/titres.rss", 
-		"actif": true 
-	}
-]; 
-
-self.Taches = []; 
+self.Taches_actifs = []; 
 
 self.Interval = localStorage.getItem("interval") || 60000; 
 self.IntervalId = 0; 
@@ -140,17 +59,6 @@ self.IntervalId = 0;
 self.EnCours = false; 
 self.Poursuivre = true; 
 
-function CleSecurite(nbre_pair) { 
-	return ( 
-		" ".repeat(parseInt(nbre_pair)).split("").map( 
-			(element) => { 
-				return Math.floor( 
-					(1 + Math.random()) * 0x10000
-				).toString(16); 
-			}
-		)
-	).join("-"); 
-} 
 
 /*--- Gestion des formats Blob d'image ---*/ 
 /**/ self.articleBlobEnCours = false; 
@@ -191,143 +99,10 @@ function CleSecurite(nbre_pair) {
 /**/         }
 /**/     }; 
 /**/ } 
-/**/ self.Taches.push(
+/**/ self.Taches_actifs.push(
 /**/     article_image_blob 
 /**/ ); 
 /*---*/ 
-
-function Creer(evt) { 
-	var db = evt.target.result;
-	var objStockage_journal = db.createObjectStore( 
-		"journal", 
-		{ 
-			keyPath: "id", 
-			autoIncrement : true 
-		}
-	); 
-	objStockage_journal.add({
-		"type": "information",	
-		"niveau": 9, 
-		"code": "module.installation", 
-		"message": "Installation d'une version et lancement initial du module", 
-		"date": new Date().toUTCString() 
-	}); 
-	var objStockage_options = db.createObjectStore( 
-		"options", 
-		{ 
-			keyPath: "id", 
-			autoIncrement : true 
-		}
-	); 
-	objStockage_options.add({ 
-		"id": "general", 
-		"interval": 60000 
-	}); 
-	var objStockage_flux = db.createObjectStore( 
-		"flux", 
-		{ 
-			keyPath: "id", 
-			autoIncrement : true 
-		}
-	);
-	objStockage_flux.createIndex( 
-		"site", 
-		"site", 
-		{ unique: false } 
-	); 
-	objStockage_flux.createIndex( 
-		"url", 
-		"url", 
-		{ unique: true } 
-	);
-	objStockage_flux.transaction.oncomplete = function(event) { 
-		var objStockage_flux_ajout = db.transaction("flux", "readwrite").objectStore("flux");
-		for (var i=0; i<self.fluxInitiaux.length; i++) {
-			objStockage_flux_ajout.add( 
-				self.fluxInitiaux[i] 
-			); 
-		}
-	} 
-    var objStockage_ressources = db.createObjectStore( 
-        "ressources", 
-        { 
-            keyPath: "id", 
-            autoIncrement : true 
-        }
-    );
-    objStockage_ressources.createIndex( 
-        "fichierNom", 
-        "fichierNom", 
-        { unique: false } 
-    ); 
-    objStockage_ressources.createIndex( 
-        "fichierTaille", 
-        "fichierTaille", 
-        { unique: false } 
-    ); 
-    objStockage_ressources.createIndex( 
-        "fichierTypeMIME", 
-        "fichierTypeMIME", 
-        { unique: false } 
-    ); 
-    objStockage_ressources.createIndex( 
-        "fichierFormat", 
-        "fichierFormat", 
-        { unique: false } 
-    ); 
-    objStockage_ressources.createIndex( 
-        "fichierOrigine", 
-        "fichierOrigine", 
-        { unique: true } 
-    ); 
-    objStockage_ressources.createIndex( 
-        "fichierPath", 
-        "fichierPath", 
-        { unique: false } 
-    ); 
-    objStockage_ressources.createIndex( 
-        "fichierDateAjout", 
-        "fichierDateAjout", 
-        { unique: false } 
-    ); 
-    objStockage_ressources.createIndex( 
-        "fichierDateModification", 
-        "fichierDateModification", 
-        { unique: false } 
-    ); 
-	var objStockage_articles = db.createObjectStore( 
-		"articles", 
-		{ 
-			keyPath: "id", 
-			autoIncrement : true 
-		}
-	);
-	objStockage_articles.createIndex( 
-		"flux.id", 
-		"flux.id", 
-		{ unique: false } 
-	); 
-	objStockage_articles.createIndex( 
-		"articleId", 
-		"articleId", 
-		{ unique: true } 
-	); 
-	objStockage_articles.createIndex( 
-		"articleTitre", 
-		"articleTitre", 
-		{ unique: false } 
-	); 
-	objStockage_articles.createIndex( 
-		"articleDescription", 
-		"articleDescription", 
-		{ unique: false } 
-	); 
-	objStockage_articles.createIndex( 
-		"article", 
-		"article", 
-		{ unique: false } 
-	); 
-}
 
 /*--- Journal de bord ---*/ 
 
@@ -360,9 +135,9 @@ function Journaliser(type, niveau, code, message) {
 /*---*/ 
 
 function realiserTaches() { 
-    for(var i=0; i<self.Taches.length; i++) { 
+    for(var i=0; i<self.Taches_actifs.length; i++) { 
         try { 
-            self.Taches[i](); 
+            self.Taches_actifs[i](); 
         } catch(e) { 
             console.log( 
                 "!err: tache n°"+i.toString()+" : "+e.message 
@@ -372,7 +147,6 @@ function realiserTaches() {
 }
 
 var r = self.indexedDB.open("Nothus-RSS"); 
-r.onupgradeneeded = Creer; 
 r.onsuccess = function(event) {
 	self.db = event.target.result; 
 	Journal_ouvrir(); 
@@ -386,9 +160,6 @@ r.onsuccess = function(event) {
 	r_options.onsuccess = function(evtBDD) { 
 		var optionsG = evtBDD.target.result; 
 		self.EnCours = false; 
-		self.Taches.push(
-			self.Lancer 
-		); 
         realiserTaches(); 
 		self.IntervalId = setInterval(
 			realiserTaches, 
@@ -409,21 +180,6 @@ function Poursuite(etat) {
 		self.Poursuivre = (etat)?true:false; 
 	return self.Poursuivre; 
 } 
-
-function detecter_cdata(texte) { 
-	var r = new RegExp(/^\<\!\[CDATA\[(.*)\]\]\>$/i).exec(texte); 
-	r = (r!=null)?r[1]:texte; 
-	return r.replace( 
-		"&lt;",
-		"<" 
-	).replace( 
-		"&gt;", 
-		">" 
-	).replace( 
-		/<[^>]*>/g,
-		"" 
-	); 
-}
 
 function Article_recuperer_RSS(article) { 
 	var lien = article.getElementsByTagName("link")[0].innerHTML; 
@@ -458,82 +214,3 @@ function Article_recuperer_RSS(article) {
 		"image": image 
 	}; 
 }
-
-
-self.Lancer = function () {
-	if (self.EnCours) 
-		return ; 
-	if (self.Poursuivre!==true) 
-		return ; 
-	self.EnCours = true; 
-	var r = self.db.transaction("flux", "readonly").objectStore("flux").getAll(); 
-	r.onerror = (event) => {} 
-	r.onsuccess = function(event) { 
-		event.target.result.forEach(
-			(element) => { 
-				if (element["actif"] !== true) 
-					return; 
-				var xhr = new XMLHttpRequest(); 
-				xhr.onreadystatechange = (evt) => {
-				if (xhr.readyState === XMLHttpRequest.DONE) {
-					if (xhr.status === 200) { 
-						var bdd_articles = self.db.transaction("articles", "readwrite").objectStore("articles"); 
-						var objArticles = {}; 
-						//console.log(xhr.responseXML); 
-						var articles = xhr.responseXML.getElementsByTagName("item"); 
-						for (var i=0; i<articles.length; i++) { 
-							try { 
-								var article = Article_recuperer_RSS( 
-									articles[i] 
-								); 
-								objArticles[article["lienPermanent"]] = { 
-									"flux.id": element["id"], 
-									"articleId" : article["lienPermanent"], 
-									"articleTitre" : article["titre"], 
-									"articleDescription" : article["description"], 
-									"article": {
-										"lien": article["lien"], 
-										"titre": article["titre"], 
-										"description" : article["description"], 
-										"pubDate": article["pubDate"], 
-										"lienPermanent": article["lienPermanent"], 
-										"image": article["image"], 
-										"suivi" : false 
-									} 
-								}; 
-							} catch(e) { console.log("récup item flux ko : ", e.message); }
-						} 
-						var objStockArticles = self.db.transaction( 
-							"articles", 
-							"readwrite" 
-						).objectStore( 
-							"articles" 
-						); 
-						objStockArticles.index( 
-							"articleId" 
-						).openCursor().onsuccess = (evt) => { 
-							var c = evt.target.result; 
-							if (c) { 
-								if (typeof objArticles[c.value.articleId]!=undefined) 
-									delete objArticles[c.value.articleId]; 
-								c.continue(); 
-							} else { 
-								for (var a in objArticles) { 
-									objStockArticles.put(objArticles[a]); 
-								} 
-							}
-						}; 
-					} else { 
-						element["actif"] = false; 
-					} 
-					element["etat"] = "HTTP-"+xhr.status.toString(); 
-					self.db.transaction("flux", "readwrite").objectStore("flux").put(element); 
-				} 
-				self.EnCours = false; 
-			}; 
-			xhr.open("GET", element["url"]);
-			xhr.send(); 
-			}
-		); 
-	}; 
-}; 

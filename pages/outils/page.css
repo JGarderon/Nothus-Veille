@@ -65,7 +65,7 @@ fieldset legend {
 	color: rgba(0, 0, 0, 0.75);
 } 
 #page input[type=submit] { 
-	width: auto; 
+	width: 100%; 
 	margin-top: 0.25rem; 
 	padding: 0.5rem; 
 	font-size: 80%; 
@@ -109,4 +109,35 @@ fieldset legend {
 	padding: 0rem; 
 	font-size: 80%; 
 	font-style: italic;
+} 
+
+.formulaireInsertion { 
+	display: block; 
+	width: 100%; 
+} 
+.formulaireInsertion span.resultat ul { 
+	display: flex; 
+	flex-direction: row; 
+	flex-wrap: wrap; 
+	margin: 0rem; 
+	padding: 0rem; 
+} 
+.formulaireInsertion span.resultat li { 
+	margin: 0.15rem; 
+	padding: 0.25rem; 
+	font-size: 90%; 
+	color: #fff; 
+	list-style-type: none; 
+} 
+.formulaireInsertion form { 
+	display: flex; 
+	width: 100%; 
+	flex-direction: column; 
+} 
+.formulaireInsertion textarea { 
+	padding: 0.15rem; 
+	font-size: 115%;
+	color: rgba(30, 45, 59, 1); 
+	background: rgba(200,200,200,0.85); 
+	border: solid 1px rgba(30, 45, 59, 1);
 } 

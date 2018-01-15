@@ -1,0 +1,205 @@
+<!-- GABARIT - gestion des Flux et des Secteurs --><!DOCTYPE html>
+<html lang="fr">
+<head>
+	<meta charset="utf-8"> 
+	<title>Nothus-Veille - édition des flux et des secteurs</title>
+	<link href="./pages/sources/page.css" rel="stylesheet" type="text/css" />
+	<script type="text/javascript" src="./pages/sources/page.js"></script> 
+</head>
+<body> 
+
+<div id="page"> 
+
+	<div class="titraille">
+		<h1> 
+			<span class="interrogation">?</span> 
+			Edition des flux et des secteurs 
+		</h1> 
+		<span class="texte"> 
+			<p> 
+				Sur cette page, vous pouvez éditer à loisir les flux RSS que vous avez ajouté au récupérateur. Ces flux peuvent être regroupés dans des secteurs. Un flux peut être dans aucun, un ou plusieurs secteurs. 
+			</p> 
+			<p> 
+				Les secteurs sont particulièrement utiles lorsque vous dépassez plusieurs dizaines de flux, afin de catégoriser vos flux d'articles. Les secteurs peuvent également délimités l'étendue de vos recherches comme les articles qui seront affichés par votre lecteur. 
+			</p> 
+		</span> 
+	</div> 
+
+	<div id="choix"> 
+		<a href="#" type="fluxAjouter">ajouter un flux</a> 
+		<a href="#" type="secteurAjouter">ajouter un secteur</a> 
+		<a href="#" type="recuperateur">accès au récupérateur</a> 
+		<a href="#" type="fluxModifier">éditer vos flux</a> 
+		<a href="#" type="secteursModifier">éditer vos secteurs</a> 
+		<a href="#" type="outils">accès aux outils</a> 
+		<a href="#" type="nettoyer">nettoyer la base d'articles</a> 
+		<a href="#" type="introduire">flux proposés par défaut</a> 
+	</div> 
+
+	<span id="conteneur"> 
+		<div id="formulaire"></div> 
+		<div id="liste"></div> 
+	</span> 
+
+</div> 
+
+<style type="text/html" gabarit="introduire"> 
+	<div class="titraille">
+		<h1> 
+			<span class="interrogation">?</span> 
+			Introduction de flux 
+		</h1> 
+		<span class="texte"> 
+			<p> 
+				Ces flux seront mis à jour à chaque nouvelle version du module. N'oubliez pas de vérifier que vous disposez d'un droit d'usage de ces flux (droits non-garantis par le module). 
+			</p> 
+			<p> 
+				N'installez pas les flux inutiles : vous ralentissez inutilement votre ordinateur comme les serveurs des propriétaires du flux. Soyez écolo! ;) 
+			</p> 
+		</span> 
+	</div> 
+</style> 
+
+<style type="text/html" gabarit="introduireSecteur"> 
+	<span class="bouton"> 
+		<input type="button" class="secteur" secteurId="{{secteurId}}" value="ajouter tout ce secteur" /> 
+	</span> 
+	<span class="SecteurTitre"> 
+		<a href="#" secteurId="{{secteurId}}">{{secteurTitre}}</a>
+	</span> 
+	<div class="secteurFlux" id="secteur{{secteurId}}"></div> 
+</style> 
+
+<style type="text/html" gabarit="introduireSecteurFlux"> 
+	<span class="bouton"> 
+		<input type="button" class="flux" value="ajouter seulement ce flux" fluxId="{{fluxId}}" /> 
+	</span> 
+	<span class="fluxTitre" id="flux{{fluxId}}"> 
+		<a href="{{fluxURL}}" target="_blank"> 
+			{{fluxTitre}} 
+		</a> 
+	</span> 
+</style> 
+
+<style type="text/html" gabarit="editionFlux"> 
+	<fieldset> 
+		<legend>Flux enregistrés</legend> 
+	</fieldset> 
+</style> 
+
+<style type="text/html" gabarit="editionFlux_item"> 
+	<a href="#formulaire" class="item" type="flux" fluxId="{{fluxId}}"> 
+		{{fluxTitre}} 
+	</a> 
+</style> 
+
+<style type="text/html" gabarit="editionFlux_formulaire"> 
+	<form class="edition" type="flux"> 
+		<input type="hidden" name="fluxId" value="{{fluxId}}" /> 
+		<fieldset> 
+			<legend> 
+				Flux "{{titre}}" 
+			</legend> 
+			<span class="resultat"></span> 
+			<span class="ligne"> 
+				<label>Titre</label> 
+				<input type="text" name="fluxTitre" value="{{fluxTitre}}" /> 
+			</span> 
+			<span class="ligne"> 
+				<label>URL</label> 
+				<input type="text" name="fluxURL" value="{{fluxURL}}" /> 
+			</span> 
+			<span class="ligne"> 
+				<input type="submit" value="enregistrer" /> 
+				<input type="button" value="supprimer" _type="flux" fluxId="{{fluxId}}" /> 
+			</span> 
+		</fieldset>  
+	</form> 
+</style> 
+
+<style type="text/html" gabarit="editionFlux_formulaireSecteur"> 
+	<input type="button" value="{{secteurNom}}" fluxId="{{fluxId}}" secteurId="{{secteurId}}" /> 
+</style> 
+
+<style type="text/html" gabarit="editionSecteurs"> 
+	<fieldset> 
+		<legend>Secteurs enregistrés</legend> 
+	</fieldset> 
+</style> 
+
+<style type="text/html" gabarit="editionSecteurs_item"> 
+	<a href="#formulaire" class="item" type="secteur" secteurId="{{secteurId}}"> 
+		{{secteurTitre}} 
+	</a> 
+</style> 
+
+<style type="text/html" gabarit="editionSecteur_formulaire"> 
+	<form class="edition" type="secteur"> 
+		<input type="hidden" name="secteurId" value="{{secteurId}}" /> 
+		<fieldset> 
+			<legend> 
+				Secteur "{{secteurTitre}}" 
+			</legend> 
+			<span class="resultat"></span> 
+			<span class="ligne"> 
+				<label>Titre</label> 
+				<input type="text" name="secteurTitre" value="{{secteurTitre}}" /> 
+			</span> 
+			<span class="ligne"> 
+				<input type="submit" value="enregistrer" /> 
+				<input type="button" value="supprimer" type="secteur" secteurId="{{secteurId}}" /> 
+			</span> 
+		</fieldset>  
+	</form> 
+</style> 
+
+<style type="text/html" gabarit="editionSecteur_formulaireFlux"> 
+	<input type="button" value="{{secteurTitre}}" fluxId="{{fluxId}}" secteurId="{{secteurId}}" /> 
+</style> 
+
+<style type="text/html" gabarit="editionJonctions"> 
+	<fieldset> 
+		<legend>Appartenance du flux aux secteurs</legend> 
+	</fieldset> 
+</style> 
+
+<style type="text/html" gabarit="editionJonctions_item"> 
+	<a href="#liste" jonction="{{jonction}}" fluxId="{{fluxId}}" secteurId="{{secteurId}}"> 
+		{{secteurTitre}} 
+	</a> 
+</style> 
+
+<style type="text/html" gabarit="nettoyer"> 
+	<div class="titraille">
+		<h1> 
+			<span class="interrogation">?</span> 
+			Nettoyer les vieux articles 
+		</h1> 
+		<span class="texte"> 
+			<p> 
+				Cette fonction vous permet de supprimer les articles les moins pertinents. Si peu de choix sont offerts aujourd'hui, la fonction sera améliorée avec le temps et l'évolution du module. Le nettoyage de la base d'articles <b>n'est jamais</b> automatique et doit être lancé par l'utilisateur (pour éviter toute perte hasardeuse), lorsque des ralentissements se font sentir dans l'application (généralement après plusieurs dizaines de milliers articles stockés). 
+			</p> 
+			<p> 
+				Une fois le nettoyage lancé, il est impossible de revenir en arrière ou de récupérer les articles. A ce jour, le tri s'effectue sur les articles qui ont au moins une vue, qui ne sont pas suivis <b>et</b> dont le nombre de jours est atteint. Un article supprimé <b>peut</b> réapparaître inopinément sur les flux les moins mis à jour (par exemple avec une mise à jour supérieure à deux mois). 
+			</p>
+		</span> 
+	</div> 
+	<form class="nettoyage"> 
+		<fieldset> 
+			<legend> 
+				Paramètres 
+			</legend> 
+			<span class="resultat"></span> 
+			<span class="ligne"> 
+				<label>Nbre de jours</label> 
+				<input type="text" name="nbreJours" value="5" pattern="[0-9]{1,4}" /> 
+			</span> 
+			<span class="ligne"> 
+				<input type="submit" value="Prêt à un nettoyage ?" /> 
+			</span> 
+		</fieldset>  
+	</form> 
+</style> 
+
+</body>
+</html> 

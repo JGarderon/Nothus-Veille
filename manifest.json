@@ -2,17 +2,15 @@
     "manifest_version": 2,
     "name": "Nothus-Veille",
     "description": "Outil d'aide à la veille.",
-    "version": "1.0.5",
+    "version": "1.1",
     "homepage_url": "https://github.com/JGarderon/Nothus-Veille",
-    "icons": {
+    "icons": { 
         "48": "logo.png"
     }, 
 
-    "background": {
-        "scripts": [ 
-            "/routines/actif.js" 
-        ] 
-    },
+    "background": { 
+        "page": "./routines/routines.html" 
+    }, 
 
     "browser_action": { 
         "default_icon": "logo.png" 
