@@ -289,6 +289,7 @@ function Introduire(
 	el_formulaire.appendChild( 
 		elIntro 
 	); 
+	HTML_titraille(); 
 	Chargement(false); 
 } 
 
@@ -522,10 +523,6 @@ function Sauvegarder(
 			); 
 
 	}; 
-	evt.target.setAttribute( 
-		"encours", 
-		"oui" 
-	); 
 	var objet = {}; 
 	evt.target.querySelectorAll( 
 		"input[type=text], input[type=hidden]" 
@@ -570,6 +567,7 @@ function Sauvegarder(
 		{ 
 			"id": objet.id, 
 			"titre": objet.titre, 
+			"flux": [] 
 		}; 
 	var objStockage = window.db.transaction( 
 		(type=="flux")?"flux":"secteurs", 
@@ -578,6 +576,10 @@ function Sauvegarder(
 		(type=="flux")?"flux":"secteurs" 
 	); 
 	var succes = (evtBDD) => { 
+		f.setAttribute( 
+			"encours", 
+			"non" 
+		); 
 		_fct(
 			(type=="flux")? 
 				"L'URL a été inscrite comme un nouveau flux à récupérer." 
@@ -591,6 +593,10 @@ function Sauvegarder(
 		); 
 	}; 
 	var echec = (evtBDD) => { 
+		f.setAttribute( 
+			"encours", 
+			"non" 
+		); 
 		_fct(
 			(type=="flux")? 
 				"Une erreur est survenue : les URLs ne peuvent pas avoir de doublons." 
@@ -607,6 +613,18 @@ function Sauvegarder(
 		var r = objStockage.add( 
 			objet 
 		); 
+		r.onsuccess = (evtBDD) => { 
+			_fct( 
+				"Le secteur a bien été ajouté.", 
+				"correct" 
+			)
+		}; 
+		r.onerror = (evtBDD) => { 
+			_fct( 
+				"Le secteur n'a pas pu être ajouté (doublon de titre ?).", 
+				"incorrect" 
+			)
+		}; 
 	} else { 
 		objet.id = parseInt(objet.id); 
 		if (type=="flux") { 
@@ -619,6 +637,10 @@ function Sauvegarder(
 			objStockage.get( 
 				objet.id 
 			).onsuccess = (evtBDD) => { 
+				f.setAttribute( 
+					"encours", 
+					"non" 
+				); 
 				objet.flux = evtBDD.target.result.flux; 
 				var r = objStockage.put( 
 					objet 
@@ -882,6 +904,8 @@ function Jonction(
 	).openCursor().onsuccess = (evtBDD) => { 
 		var curseur = evtBDD.target.result; 
 		if (curseur) { 
+			if (typeof curseur.value["flux"]=="undefined") 
+				curseur.value.flux = []; 
 			Gabarit( 
 				"editionJonctions_item", 
 				{
@@ -908,8 +932,6 @@ function Jonction(
 			//
 		}
 	}; 
-	console.log(); 
-	//editionJonction
 }
 
 function __chargement__() { 
