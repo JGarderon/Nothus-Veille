@@ -109,8 +109,7 @@ window.Articles = {
 				).getTime() 
 			); 
 		} 
-		
-		var trouve = 0; 
+
 		var listeTmp = []; 
 		window.db.transaction(
 			"articles", 
@@ -119,41 +118,40 @@ window.Articles = {
 			"articles"
 		).index( 
 			"articleDate" 
-		).openCursor().onsuccess = (evtBDD) => { 
+		).openCursor(
+			intervalle, 
+			(date_inverse)?"prev":"next" 
+		).onsuccess = (evtBDD) => { 
 			var curseur = evtBDD.target.result; 
 			if (curseur) { 
 				var i = 1; 
-				if (intervalle.includes( 
-					curseur.value.articleDate 
-				)) 
-					i *= 2; 
 				if (sources==null) { 
-					i *= 3; 
+					i *= 2; 
 				} else { 
 					if ( 
 						sources.indexOf( 
 							curseur.value["flux.id"] 
 						)>-1 
 					) 
-						i *= 3; 
+						i *= 2; 
 				} 
 				if (
 					!( 
 						curseur.value.id in window.Articles.extraction 
 					) 
 				) 
-					i *= 5; 
+					i *= 3; 
 				if (
 					objExp==null 
 				) { 
-					i *= 7; 
+					i *= 5; 
 				} else { 
 					var txt = curseur.value.articleTitre+" "+curseur.value.Description; 
 					if (objExp.expReg) { 
 						if ( 
 							objExp.exp.test(txt) 
 						) 
-							i *= 7; 
+							i *= 5; 
 					} else { 
 						if ( 
 							objExp.exp!=null
@@ -164,46 +162,26 @@ window.Articles = {
 								objExp.exp
 							)!=null 
 						)
-							i *= 7; 
+							i *= 5; 
 					}
 				} 
 				if ( 
-					i==210
+					i==30
 				) { 
-					trouve++; 
-					listeTmp.push(
-						curseur.value
+					window.Articles.extraction[curseur.value.id] = curseur.value.articleId; 
+					window.Articles.liste.push(
+						curseur.value 
 					); 
-					listeTmp.sort( 
-						(a,b) => { 
-							return (date_inverse)?(
-								b.articleDate-a.articleDate 
-							):(
-								a.articleDate-b.articleDate 
-							) 
-						} 
-					); 
-					if (listeTmp.length>=nbre_max) 
-						listeTmp = listeTmp.slice(
-							0, 
-							nbre_max 
-						); 
 				} 
-				curseur.continue(); 
-			} else { 
-				listeTmp.forEach( 
-					(article) => { 
-						window.Articles.extraction[article.id] = article.articleId; 
-						window.Articles.liste.push(
-							article 
-						); 
-					}
-				); 
-				if (trouve>nbre_max) { 
-					_Suite(); 
+				if (
+					nbre_max>window.Articles.liste.length
+				) {
+					curseur.continue(); 
 				} else { 
-					_Fin(); 
-				}
+					_Suite(); 
+				} 
+			} else { 
+				_Fin(); 
 			}
 		} 
 	} 

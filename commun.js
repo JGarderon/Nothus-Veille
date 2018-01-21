@@ -1,4 +1,6 @@
 
+window.BDD_version = 3; 
+
 window.ENCOURS = true; 
 window.addEventListener("beforeunload", (evt) => { 
 	if (!window.ENCOURS) 
