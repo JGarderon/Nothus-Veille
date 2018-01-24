@@ -8,7 +8,7 @@ self.Installation.Stockages = {
 		"_options" : { 
 			keyPath: "id", 
 			autoIncrement : true 
-		} , 
+		}, 
 		"_index" : { 
 			"flux.id" : { unique: false },
 			"fluxId" : { unique: false }, 
@@ -131,11 +131,25 @@ self.Installation.Stockages = {
         	"fichierDateModification" : { unique: false } 
 		}, 
 		"_entrees" : []  
+	}, 
+	"notes": { 
+		"_options" : { 
+            keyPath: "id", 
+            autoIncrement : true 
+		} , 
+		"_index" : { 
+			"titre" : { unique: true },
+			"version" : { unique: false }, 
+			"contenu" : { unique: false }, 
+			"dateCreation" : { unique: false }, 
+			"dateMaJ" : { unique: false } 
+		}, 
+		"_entrees" : []  
 	} 
 }
 
 
-self.Installation.__installation__ = (_db) => { 
+self.Installation.__installation__ = (_db, _SuiteOk) => { 
 	for (var stockageNom in self.Installation.Stockages) { 
 		(self.Installation.DEBUG)?console.log(  
 			"Installation:demande::", stockageNom 
@@ -169,6 +183,7 @@ self.Installation.__installation__ = (_db) => {
 						); 
 					}; 
 				} 
+				return _SuiteOk(); 
 			}; 
 		for(var indexNom in stockageObj._index) { 
 			(self.Installation.DEBUG)?console.log( 
@@ -184,10 +199,15 @@ self.Installation.__installation__ = (_db) => {
 	}  
 }; 
 
-// version inférieure à 1.1 : aucun
-// version 1.1 : 2 
-self.indexedDB.open("Nothus-RSS", 2).onupgradeneeded = (evtBDD) => { 
+self.indexedDB.open( 
+	"Nothus-RSS", 
+	self.BDD_version 
+).onupgradeneeded = (evtBDD) => { 
 	self.Installation.__installation__( 
-		evtBDD.target.result 
+		evtBDD.target.result, 
+		() => { 
+			
+		}
 	); 
 }; 
+

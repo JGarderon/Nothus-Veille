@@ -1,7 +1,3 @@
-console.log( 
-	"recherche-flux.js", 
-	self 
-); 
 
 try { 
 	var flux = []; 
@@ -32,7 +28,9 @@ try {
 		} 
 	}); 
 	if (flux.length>0)
-		browser.runtime.sendMessage({ 
+		(
+			(typeof browser=="undefined")?chrome:browser 
+		).runtime.sendMessage({ 
 			"type": "flux_ajouter", 
 			"items": flux 
 		}); 
@@ -42,10 +40,4 @@ try {
 		"Une erreur a été récupérée", 
 		e
 	); 
-}
-
-
-console.log( 
-	"recherche-flux.js", 
-	"fin" 
-); 
+} 

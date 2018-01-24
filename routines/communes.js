@@ -1,5 +1,13 @@
 
-browser.browserAction.onClicked.addListener(() =>{ 
+// version inférieure à 1.1 : aucun 
+// version 1.1 / 1.1.1 : 2 
+// version 1.1.2 : 3 
+self.BDD_version = 3; 
+/*---*/ 
+
+( 
+	(typeof browser=="undefined")?chrome:browser 
+).browserAction.onClicked.addListener(() =>{ 
 	browser.tabs.create({
 		url: "/gabarit.html"
 	});
@@ -13,9 +21,13 @@ if (self.localStorage.getItem("RSS.flux.temporaires")==null)
 /*---*/ 
 
 function notifier(titre, message) { 
-    browser.notifications.create({
+    ( 
+    	(typeof browser=="undefined")?chrome:browser 
+    ).notifications.create({
         "type": "basic",
-        "iconUrl": browser.extension.getURL("/logo.png"),
+        "iconUrl": ( 
+        	(typeof browser=="undefined")?chrome:browser 
+        ).extension.getURL("/logo.png"),
         "title": titre,
         "message": message 
     });
@@ -70,7 +82,9 @@ function gerer_action_fluxTmpAjouter(items) {
 	return nbre; 
 } 
 
-browser.runtime.onMessage.addListener((message) => { 
+(
+	(typeof browser=="undefined")?chrome:browser 
+).runtime.onMessage.addListener((message) => { 
     if (typeof message=="object") 
         switch(message["type"]) { 
             default: 

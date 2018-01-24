@@ -119,7 +119,8 @@ self._local_statistique.Taches.push(
 
 self._local_statistique.__chargement__ = function() { 
 	var r = self.indexedDB.open( 
-		"Nothus-RSS" 
+		"Nothus-RSS", 
+		self.BDD_version 
 	); 
 	r.onsuccess = (evtBDD) => { 
 		self._local_statistique.db = evtBDD.target.result; 

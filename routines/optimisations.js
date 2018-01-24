@@ -95,7 +95,8 @@ self.Optimisations.Taches.push(
 
 self.Optimisations.__chargement__ = function () { 
 	var r = self.indexedDB.open( 
-		"Nothus-RSS" 
+		"Nothus-RSS", 
+		self.BDD_version 
 	); 
 	r.onsuccess = (event) => {
 		self.Optimisations.db = event.target.result; 

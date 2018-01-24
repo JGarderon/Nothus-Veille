@@ -120,7 +120,9 @@ function ExporterOPML(BDD, _SuiteOk) {
 		} else { 
 			contenu.appendChild(corps); 
 			doc.appendChild(contenu); 
-			browser.downloads.download({ 
+			( 
+				(typeof browser=="undefined")?chrome:browser 
+			).downloads.download({ 
 				"url": URL.createObjectURL(
 					new Blob( 
 						[new XMLSerializer().serializeToString(doc)], 

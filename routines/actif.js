@@ -146,8 +146,10 @@ function realiserTaches() {
     } 
 }
 
-var r = self.indexedDB.open("Nothus-RSS"); 
-r.onsuccess = function(event) {
+self.indexedDB.open(
+	"Nothus-RSS", 
+	self.BDD_version 
+).onsuccess = function(event) {
 	self.db = event.target.result; 
 	Journal_ouvrir(); 
 	Journaliser("information", 0, "module.demarrage", "Démarrage du script d'arrière plan"); 

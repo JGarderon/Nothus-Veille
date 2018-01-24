@@ -10,7 +10,9 @@ self.FavorisSync = {
 	"favFlux": {}, 
 	"favInitier_etape2": function() { 
 		console.log(self.FavorisSync.dossiersFavoris); 
-		browser.bookmarks.getChildren( 
+		(
+			(typeof browser=="undefined")?chrome:browser 
+		).bookmarks.getChildren( 
 			self.FavorisSync.dossiersFavoris["racine-flux"][1].id 
 		).then(
 			(flux) => { 
@@ -107,7 +109,9 @@ self.FavorisSync = {
 		); 
 	}, 
 	"favDossierCreer": function (nom, parentId, _SuiteOk) { 
-		browser.bookmarks.create({ 
+		( 
+			(typeof browser=="undefined")?chrome:browser 
+		).bookmarks.create({ 
 			"title": nom, 
 			"type": "folder", 
 			"parentId": parentId 
@@ -116,7 +120,9 @@ self.FavorisSync = {
 		); 
 	}, 
 	"favDossierTrouver": function(nom, _SuiteOk, _SuiteKo) { 
-		browser.bookmarks.search({ 
+		( 
+			(typeof browser=="undefined")?chrome:browser 
+		).bookmarks.search({ 
 			"title": nom 
 		}).then( 
 			(evt) => { 
@@ -127,7 +133,9 @@ self.FavorisSync = {
 		); 
 	}, 
 	"favTester": function(url, _SuiteOk, _SuiteKo) { 
-		browser.bookmarks.search({ 
+		( 
+			(typeof browser=="undefined")?chrome:browser 
+		).bookmarks.search({ 
 			"url": url 
 		}).then( 
 			_SuiteOk, 
@@ -135,7 +143,9 @@ self.FavorisSync = {
 		); 
 	}, 
 	"favAjouter": function(titre, url, typeRacine, _SuiteOk) { 
-		browser.bookmarks.create({ 
+		(
+			(typeof browser=="undefined")?chrome:browser 
+		).bookmarks.create({ 
 			"type": "bookmark", 
 			"parentId": self.FavorisSync.dossiersFavoris[typeRacine][1].id, 
 			"index": 0, 

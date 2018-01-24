@@ -153,7 +153,9 @@ function Article_afficher_evenement(objHTML) {
 		"click", 
 		(evt) => { 
 			evt.preventDefault(); 
-		 	browser.tabs.create({
+		 	( 
+		 		(typeof browser=="undefined")?chrome:browser 
+		 	).tabs.create({
 				url: evt.target.getAttribute("href") 
 			}); 
 			var objStockageArticles = window.db.transaction(
@@ -318,8 +320,10 @@ function __chargement_gabarit__(evt) {
 	window.Article_elA.style.display = "none"; 
 	window.Article_gabarit = Gabarit_retrouver("article"); 
 
-	var r = self.indexedDB.open("Nothus-RSS"); 
-	r.onsuccess = (evtBDD) => { 
+	self.indexedDB.open(
+		"Nothus-RSS", 
+		window.BDD_version 
+	).onsuccess = (evtBDD) => { 
 		window.db = evtBDD.target.result; 
 		Statistiques_MaJ_Page(); 
 		Vue_preparer( 

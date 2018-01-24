@@ -1,8 +1,9 @@
 {
     "manifest_version": 2,
     "name": "Nothus-Veille",
+    "short_name": "NothusVeille", 
     "description": "Outil d'aide à la veille.",
-    "version": "1.1.2",
+    "version": "1.1.4",
     "homepage_url": "https://github.com/JGarderon/Nothus-Veille",
     "icons": { 
         "48": "logo.png"

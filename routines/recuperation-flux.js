@@ -2,7 +2,9 @@
 self.DEBUG = false; 
 
 self.TravailleurArticleBlob = new Worker( 
-	browser.extension.getURL( 
+	(
+		(typeof browser=="undefined")?chrome:browser 
+	).extension.getURL( 
 		"./routines/articleBlob.travailleur.js" 
 	) 
 ); 
@@ -211,7 +213,8 @@ self.IntervalId = null;
 
 function __chargement_recuperationflux__() { 
 	var r = self.indexedDB.open( 
-		"Nothus-RSS" 
+		"Nothus-RSS", 
+		self.BDD_version 
 	); 
 	r.onsuccess = (event) => {
 		self.db = event.target.result; 
