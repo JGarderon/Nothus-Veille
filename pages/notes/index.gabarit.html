@@ -1,0 +1,157 @@
+<!-- GABARIT - notes --><!DOCTYPE html>
+<html lang="fr">
+<head> 
+	<meta charset="utf-8"> 
+	<title>Nothus-Veille - notes</title>
+	<link href="./pages/notes/page.css" rel="stylesheet" type="text/css" />
+	<script type="text/javascript" src="./modules/export.module.js"></script> 
+	<script type="text/javascript" src="./pages/notes/page.js"></script> 
+</head> 
+<body> 
+
+<div id="page"> 
+
+	<div id="outils"> 
+		<a href="#nouvelleNote">écrire une nouvelle note</a> 
+		<a href="#publier/type:rapport">publier un rapport</a> 
+		<a href="#gabariser/type:notes">gabarit des notes</a> 
+		<a href="#gabariser/type:rapports">gabarit des rapports</a> 
+	</div> 
+
+	<div id="listeNotes">
+		<span class="menu">Accès rapide aux notes</span> 
+		<span class="contenuMenu"></span> 
+	</div> 
+
+	<div id="note"> 
+
+	</div> 
+
+</div> 
+
+<style type="text/html" gabarit="itemMenu"> 
+	<span class="listeNote" id="note{{id}}"> 
+		<a href="#lireNote/noteId:{{id}}"> 
+			{{titre}} 
+		</a> 
+		({{dateMaJ}}) 
+	</span> 
+</style> 
+
+<style type="text/html" gabarit="formulaireNote"> 
+	<div class="titraille">
+		<h1> 
+			<span class="interrogation">?</span> 
+			Editer une note
+		</h1> 
+		<span class="texte"> 
+			<p> 
+				Une note est composée d'un titre et d'un contenu. Elle peut être exportée seule ou dans un ensemble avec d'autres, sous la forme d'un rapport. Vous pouvez personnaliser la stylisation des notes ou des rapports. 
+			</p> 
+			<p> 
+				Prochainement, des variables éditables par note ou par rapport, vous seront proposées. 
+			</p> 
+		</span> 
+	</div> 
+	<form id="noteFormulaire"> 
+		<span class="resultat"></span>  
+		<input type="hidden" id="noteId" value="{{id}}" /> 
+		<fieldset> 
+			<legend>Titre</legend> 
+			<input type="text" id="noteTitre" value="{{titre}}" /> 
+		</fieldset> 
+		<fieldset> 
+			<legend>Contenu</legend> 
+			<textarea id="noteContenu" rows="5">{{contenu}}</textarea> 
+		</fieldset> 
+		<fieldset> 
+			<legend>Actions</legend> 
+			<input type="submit" value="enregistrer les modifications" /> 
+			<span class="infos"> 
+				<span class="dateCreation"> 
+					créée à {{dateCreation}} 
+				</span> 
+				<span class="dateMaJ"> 
+					modifiée à {{dateMaJ}} 
+				</span> 
+			</span> 
+		</fieldset> 
+	</form> 
+</style> 
+
+<style type="text/html" gabarit="formulaireSuppressionNote"> 
+	<form id="noteSuppression" noteId="{{noteId}}"> 
+		<input type="submit" value="supprimer cette note" /> 
+	</form> 
+</style> 
+
+<style type="text/html" gabarit="formulaireGabarit_ajout"> 
+	<fieldset> 
+		<legend>Résumé du rapport</legend>
+		<textarea id="gabaritResume" rows="5">{{gabaritResume}}</textarea> 
+	</fieldset> 
+</style> 
+
+<style type="text/html" gabarit="formulaireGabarit"> 
+	<div class="titraille">
+		<h1> 
+			<span class="interrogation">?</span> 
+			{{titre}} 
+		</h1> 
+		<span class="texte"> 
+			{{texte}} 
+		</span> 
+	</div> 
+	<form id="gabaritFormulaire" gabaritType="{{type}}"> 
+		<span class="resultat"></span> 
+		<fieldset> 
+			<legend>Style CSS</legend>
+			<textarea id="gabaritStyle" rows="5">{{gabaritStyle}}</textarea> 
+		</fieldset> 
+		<fieldset> 
+			<legend>Actions</legend>
+			<input type="submit" value="enregistrer les modifications" /> 
+		</fieldset> 
+	</form> 
+</style> 
+
+<style type="text/html" gabarit="formulaireChoixNotes"> 
+	<div class="titraille">
+		<h1> 
+			<span class="interrogation">?</span> 
+			Choix des notes à exporter 
+		</h1> 
+		<span class="texte"> 
+			<p> 
+				Ce formulaire est destiné à sélectionner une ou plusieurs notes formant le rapport qui sera exporté. Vous pouvez ajouter un texte qui accompagne le rapport (appelé <i>résumé</i>). 
+			</p> 
+		</span> 
+	</div> 
+	<form id="formulaireRapport"> 
+		<span class="resultat"></span> 
+		<fieldset> 
+			<legend>Résumé du rapport</legend>
+			<textarea id="rapportResume" rows="5">{{contenu}}</textarea> 
+		</fieldset> 
+		<fieldset> 
+			<legend>Liste des notes disponibles</legend>
+			<span id="listeNotesRapport"></span> 
+		</fieldset> 
+		<fieldset> 
+			<legend>Actions</legend>
+			<input type="submit" value="exporter le rapport" /> 
+		</fieldset> 
+	</form> 
+</style> 
+
+<style type="text/html" gabarit="formulaireChoixNotes_item"> 
+	<input type="checkbox" name="note{{id}}" value="{{id}}" /> 
+	<span class="titre"> 
+		{{titre}} 
+	</span> 
+</style> 
+
+
+
+</body>
+</html> 

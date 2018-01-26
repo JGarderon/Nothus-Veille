@@ -2,13 +2,16 @@
 // version inférieure à 1.1 : aucun 
 // version 1.1 / 1.1.1 : 2 
 // version 1.1.2 : 3 
-self.BDD_version = 3; 
+// version 1.1.5 : 4 
+self.BDD_version = 4; 
 /*---*/ 
 
 ( 
 	(typeof browser=="undefined")?chrome:browser 
 ).browserAction.onClicked.addListener(() =>{ 
-	browser.tabs.create({
+	( 
+		(typeof browser=="undefined")?chrome:browser 
+	).tabs.create({
 		url: "/gabarit.html"
 	});
 });

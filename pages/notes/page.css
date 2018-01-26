@@ -1,0 +1,140 @@
+#page { 
+	display: block; 
+	max-width: 35rem; 
+	margin: auto; 
+	padding: 1rem; 
+}  
+
+#outils { 
+	display: flex; 
+	flex-wrap: wrap;  
+	margin: 0.25rem auto 0.25rem auto; 
+	padding: 0.25rem; 
+	color: rgba(30, 45, 59, 1); 
+} 
+#outils a { 
+	min-width: 40%; 
+	flex: 1; 
+	margin: 0.15rem 0.25rem 0rem 0.25rem; 
+	padding: 0.15rem;
+	list-style-type: none; 
+	text-align: center; 
+	color: #fff;
+	background: rgba(30, 45, 59, 1); 
+} 
+
+#listeNotes { 
+	margin: 0.25rem auto 0.25rem auto; 
+	padding: 0.25rem; 
+	color: #FF4500; 
+	border: dashed 1px #FF4500; 
+} 
+
+#listeNotes .menu { 
+	cursor: pointer; 
+} 
+
+#listeNotes .menu:before { 
+	content: "▶"; 
+	margin-right: 0.35rem; 
+} 
+#listeNotes .menu[ouvert="oui"]:before{ 
+	content: "▼"; 
+} 
+#listeNotes .contenuMenu { 
+	flex-direction: column; 
+	display: none; 
+	margin-top: 0.35rem; 
+	padding-top: 0.15rem; 
+	color: rgba(30, 45, 59, 1); 
+	border-top: dashed 1px rgba(30, 45, 59, 1); 
+	font-size: 80%; 
+} 
+
+#listeNotes .contenuMenu .listeNote { 
+	flex: 1; 
+} 
+
+#note form { 
+	width: 100%; 
+	margin: 1rem auto; 
+	display: flex; 
+	flex-direction: column; 
+} 
+
+#note form .infos { 
+	display: flex; 
+	flex-direction: row; 
+	font-size: 80%; 
+} 
+
+#note form .infos>span { 
+	flex: 1; 
+	margin: 0.15rem; 
+	text-align: center; 
+	color: rgba(30, 45, 59, 0.85); 
+} 
+
+#note fieldset { 
+	margin: 0rem;
+	padding: 0.25rem;
+	border: 0px;
+	border-top: solid 0.05rem rgba(0, 0, 0, 0.25); 
+} 
+#note fieldset legend { 
+	margin: 0rem;
+	padding: 0.25rem;
+	text-align: center; 
+	color: rgba(0, 0, 0, 0.25); 
+} 
+
+#note form textarea { 
+	padding: 0.15rem; 
+	color: rgba(30, 45, 59, 1); 
+	background: rgba(200,200,200,0.85); 
+	border: solid 1px rgba(30, 45, 59, 1); 
+} 
+#note form>textarea { 
+	flex: 1; 
+} 
+#note form fieldset textarea { 
+	width: 99%; 
+} 
+
+#note form input { 
+	padding: 0.15rem; 
+	color: rgba(30, 45, 59, 1); 
+	background: rgba(200,200,200,0.85); 
+	border: solid 1px rgba(30, 45, 59, 1); 
+} 
+#note form>input { 
+	flex: 1; 
+} 
+#note form fieldset input { 
+	width: 99%; 
+} 
+
+#note form input[type=submit] { 
+	width: 100%; 
+	margin-top: 0.25rem; 
+	padding: 0.5rem; 
+	color: #fff; 
+	background: rgba(0, 0, 0, 0.75);
+} 
+
+#listeNotesRapport span { 
+	display: flex; 
+	flex-direction: row; 
+	align-items: stretch; 
+	font-size: 90%; 
+} 
+
+#listeNotesRapport span span { 
+	flex-grow: 1; 
+	margin: auto; 
+} 
+
+#listeNotesRapport span input { 
+	max-width: 2rem; 
+	flex-shrink: 1; 
+} 

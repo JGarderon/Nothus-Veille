@@ -149,7 +149,14 @@ function Article_afficher_evenement(objHTML) {
 			} 
 		} 
 	); 
-	objHTML.querySelector(".titre").querySelector("a").addEventListener( 
+	objHTML.querySelector("a.note").addEventListener( 
+		"click", 
+		(evt) => { 
+			evt.preventDefault(); 
+			window.location.href = evt.target.getAttribute("href"); 
+		} 
+	); 
+	objHTML.querySelector(".titre").querySelector("a.titre").addEventListener( 
 		"click", 
 		(evt) => { 
 			evt.preventDefault(); 

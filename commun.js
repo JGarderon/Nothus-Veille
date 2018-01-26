@@ -1,5 +1,6 @@
 
-window.BDD_version = 3; 
+// version 1.1.5 : 4 
+window.BDD_version = 4; 
 
 window.ENCOURS = true; 
 window.addEventListener("beforeunload", (evt) => { 
@@ -113,11 +114,13 @@ function HTML_titraille() {
 } 
 
 function HTML_textareaLignes(evt) { 
-	var r = evt.target.value.match(/(\n|\r\n|\r)/g); 
-	evt.target.setAttribute( 
-		"rows", 
-		(r==null)?1:r.length-1 
-	); 
+	try { 
+		var r = evt.target.value.match(/(\n|\r\n|\r)/g); 
+		evt.target.setAttribute( 
+			"rows", 
+			(r==null)?5:((r.length-1)<5)?5:r.length-1 
+		); 
+	} catch(e) {} 
 } 
 
 function BDD_ouvrir(_SuiteOk) { 
@@ -140,6 +143,140 @@ function __auto__() {
 	}); 
 }
 
+/*---*/ 
+
+function itemMiseAJour( 
+	table, 
+	itemId, 
+	objetMaJ, 
+	_SuiteOk, 
+	_SuiteKo 
+) { 
+	itemExtraire( 
+		table, 
+		itemId, 
+		(item) => { 
+			for(var cle in objetMaJ) { 
+				item[cle] = objetMaJ[cle]; 
+			} 
+			if ("version" in item) 
+				item["version"]++; 
+			itemEnregistrer( 
+				table, 
+				false, 
+				item, 
+				_SuiteOk, 
+				_SuiteKo 
+			); 
+		}, 
+		_SuiteKo 
+	); 
+} 
+
+function itemActionner( 
+	table, 
+	action, 
+	objet, 
+	_SuiteOk, 
+	_SuiteKo  
+) { 
+	try { 
+		var objS = window.db.transaction( 
+			table, 
+			"readwrite"
+		).objectStore( 
+			table  
+		); 
+		var r = objS[action]( 
+			objet 
+		); 
+		r.onsuccess = (evtBDD) => { 
+			evtBDD.preventDefault(); 
+			if ( 
+				action!="delete" 
+			& 
+				typeof evtBDD.target.result=="undefined" 
+			) 
+				return _SuiteKo( 
+					evtBDD.target 
+				); 
+			if (typeof _SuiteOk=="function") 
+				return _SuiteOk( 
+					evtBDD.target.result 
+				); 
+		}; 
+		r.onerror = (evtBDD) => { 
+			evtBDD.preventDefault(); 
+			if (typeof _SuiteKo=="function") 
+				_SuiteKo( 
+					evtBDD.target 
+				); 
+		}; 
+	} catch(e) { 
+		_SuiteKo( 
+			e 
+		); 
+	} 
+} 
+
+function itemEnregistrer( 
+	table, 
+	nouveau, 
+	objet, 
+	_SuiteOk, 
+	_SuiteKo  
+) { 
+	itemActionner( 
+		table, 
+		(nouveau)?"add":"put", 
+		objet, 
+		_SuiteOk, 
+		_SuiteKo 
+	); 
+} 
+
+function itemExtraire( 
+	table, 
+	itemId, 
+	_SuiteOk, 
+	_SuiteKo 
+) { 
+	itemActionner( 
+		table, 
+		"get", 
+		itemId, 
+		_SuiteOk, 
+		_SuiteKo 
+	); 
+} 
+
+function itemsExtraire( 
+	table, 
+	params, 
+	_SuiteOk, 
+	_SuiteKo 
+) { 
+	var objS = window.db.transaction( 
+		table, 
+		"readonly" 
+	).objectStore( 
+		table 
+	); 
+	if ("index" in params) { 
+		objS = objS.index( 
+			params["index"] 
+		); 
+	}  
+	var r = objS.openCursor(
+		("bornes" in params)?params["bornes"]:null, 
+		("sens" in params)?params["sens"]:"next" 
+	); 
+	r.onsuccess = _SuiteOk; 
+	r.onerror = _SuiteKo; 
+} 
+
+/*---*/ 
+
 window.Pages = {}; 
 
 if (self.localStorage.getItem("RSS.flux.temporaires")==null) 
@@ -147,6 +284,12 @@ if (self.localStorage.getItem("RSS.flux.temporaires")==null)
 
 if (self.localStorage.getItem("RSS.statistiques")==null) 
 	self.localStorage.setItem("RSS.statistiques", JSON.stringify({})); 
+
+if (self.localStorage.getItem("RSS.gabarits")==null) 
+	self.localStorage.setItem("RSS.gabarits", JSON.stringify({ 
+		"notes": {"style":"", "contenu": "", "variables": {}}, 
+		"rapports": {"style":"", "contenu": "", "variables": {}, "notes": []} 
+	})); 
 
 function __chargement_commun__() { 
 	

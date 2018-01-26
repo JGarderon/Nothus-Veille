@@ -87,12 +87,21 @@
 #articlesListe .article article .titre { 
 	display: block; 
 	font-size: 115%; 
+	color: #4682B4; 
+} 
+
+#articlesListe .article article .titre *:hover { 
+	color: #FF4500; 
+} 
+
+#articlesListe .article article a.titre { 
+	display: inline; 
 } 
 
 #articlesListe .article article .suivi { 
 	padding-left: 0.15rem; 
 	cursor: pointer; 
-	color: rgba(30, 45, 59, 1); 
+	color: #4682B4; 
 } 
 
 #articlesListe .article article .suivi[suivi="oui"] { 

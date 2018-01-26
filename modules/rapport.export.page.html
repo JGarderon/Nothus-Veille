@@ -1,0 +1,99 @@
+<!-- GABARIT - export des notes et rapports --><!DOCTYPE html> 
+<html lang="fr">
+<head> 
+	<meta charset="utf-8">
+	<title>Nothus-Veille - exportation de notes et de rapports</title> 
+	<style type="text/css"> 
+		body { 
+			max-width: 21cm; 
+			font-size: 10pt; 
+			margin: 0px auto; 
+			padding: 1rem; 
+			background: white; 
+		} 
+		header, section#informations, section#notes, footer { 
+			width: 100%; 
+			max-width: 18cm; 
+			margin: 0rem auto 0rem auto; 
+			padding: 0.25rem; 
+			border-bottom: dashed 1px gray; 
+		} 
+		header { 
+			margin: 0rem auto 1rem auto; 
+			padding: 0.75rem; 
+			text-align: center; 
+			font-size: 115%; 
+			font-weight: 900; 
+		} 
+		section#informations { 
+			padding-bottom: 1rem; 
+		} 
+		section#informations span { 
+			display: block; 
+		} 
+		section#informations span.date, #notes article span.informations { 
+			display: inline-block; 
+			margin: 0.25rem 0rem;
+			padding: 0.25rem; 
+			font-size: 80%; 
+			color: gray; 
+			border-bottom: solid 1px gray; 
+		} 
+		#notes article { 
+			padding: 0.75rem; 
+		} 
+		#notes article span { 
+			display: block; 
+		} 
+		#notes article span.titre {  
+			font-weight: 900; 
+			font-variant: small-caps;
+			font-style: italic; 
+			color: darkorange; 
+		} 
+		#notes article span.informations { 
+			border-top: solid 1px gray; 
+		} 
+		#notes article span.contenu { 
+			padding: 0.25rem; 
+		} 
+		#notes article+article { 
+			margin-bottom: 0.75rem;
+			border-top: solid 1px darkorange; 
+		} 
+		footer { 
+			margin: 1rem auto 0rem auto; 
+			font-style: italic; 
+			font-size: 80%; 
+			border: 0rem; 
+		} 
+	</style> 
+	<style type="text/css" id="personnalisation"> 
+		/*--- La personnalisation du rapport ---*/ 
+	</style> 
+</head> 
+<body> 
+
+	<header> 
+		Rapport de notes 
+	</header> 
+
+	<section id="informations"> 
+		<span class="date"></span> 
+		<span class="resume"></span> 
+	</section> 
+
+	<section id="notes">
+		<article noteId=""> 
+			<span class="titre"></span> 
+			<span class="informations"></span> 
+			<span class="contenu"></span> 
+		</article> 
+	</section> 
+
+	<footer> 
+		Rapport généré et exporté grâce à l'outil de gestion des flux RSS <a href="https://addons.mozilla.org/fr/android/addon/nothus-veille/">Nothus-Veille</a> 
+	</footer> 
+
+</body> 
+</html> 
