@@ -1,0 +1,120 @@
+
+html, body { 
+	width: 100%; 
+	height: 100%; 
+	margin: 0px; 
+	padding: 0px; 
+	font-size: 10px; 
+} 
+
+body { 
+	display: flex; 
+	flex-direction: column; 
+	align-items: stretch; 
+	align-content: stretch; 
+	font-family: Verdana, Geneva, sans-serif; 
+} 
+
+header { 
+	flex: 1; 
+	flex-grow: 1; 
+	display: flex; 
+	min-height: 100%; 
+	flex-direction: column; 
+	align-items: center; 
+	justify-content: center; 
+	background: rgba(30, 45, 59, 1); 
+} 
+
+
+header span.conteneur { 
+	margin: 1rem; 
+	max-width: 50rem; 
+	border: solid 1px #FFA500;
+} 
+
+header h1 { 
+	margin: 0rem; 
+	padding: 1rem 1rem 0rem 1rem; 
+	font-size: 20pt; 
+	color: rgba(30, 45, 59, 1); 
+	background: #fff; 
+	border: solid 1px #fff;
+	border-bottom: 0px; 
+	font-variant: small-caps; 
+} 
+
+header h2 { 
+	margin: 0rem; 
+	padding: 0rem 1rem 1rem 1rem; 
+	font-size: 8pt; 
+	color: rgba(30, 45, 59, 0.55); 
+	background: #fff; 
+	border: solid 1px #fff;
+	border-bottom: 0px; 
+	font-style: italic; 
+} 
+
+header p { 
+	margin: 0rem; 
+	padding: 1rem; 
+	font-size: 10pt; 
+	color: #fff; 
+	border-left: solid 1px #fff; 
+	border-right: solid 1px #fff; 
+} 
+
+header p:first-of-type { 
+	border-top: solid 2px #FFA500; 
+	border-bottom: 0px; 
+} 
+
+header p:last-of-type { 
+	border-bottom: solid 1px #fff; 
+} 
+
+#page { 
+	flex: 1; 
+	display: flex; 
+	flex-direction: column; 
+	align-items: center; 
+	justify-content: center; 
+	padding: 5rem 0rem 5rem 0rem; 
+	background: #fff; 
+} 
+
+#page span.conteneur { 
+	display: flex; 
+	flex-direction: column; 
+	align-items: center; 
+	justify-content: center; 
+	margin: 1rem; 
+	padding: 1rem; 
+	max-width: 50rem; 
+	border: solid 1px rgba(30, 45, 59, 1);
+} 
+
+#page span.version { 
+	flex: 1;
+	width: 100%; 
+} 
+
+#page span.version[majeur="oui"] ::first-line { 
+	background: #FFA500; 
+	color: #fff;
+} 
+
+#page span.version:first-of-type { 
+	font-size: 125%; 
+	border-bottom: solid 1px #FF4500;
+} 
+
+#page span.version:first-of-type ::first-line { 
+	padding: 1rem; 
+	background: #FF4500; 
+} 
+
+#page span.version ::first-line {
+	font-size: 125%; 
+	text-transform: uppercase;
+}

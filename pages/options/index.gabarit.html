@@ -1,0 +1,159 @@
+<!-- GABARIT - options --><!DOCTYPE html>
+<html lang="fr">
+<head>
+	<meta charset="utf-8">
+	<title>Nothus-Veille - options</title>
+	<link href="./pages/options/page.css" rel="stylesheet" type="text/css" />
+	<script type="text/javascript" src="./pages/options/page.js"></script> 
+</head>
+<body> 
+
+<div id="page"> 
+	
+	<div class="titraille">
+		<h1> 
+			<span class="interrogation">?</span> 
+			Récupération forcée des flux 
+		</h1> 
+		<span class="texte"> 
+			<p> 
+				Vous pouvez lancer une récupération manuelle, en plus celle déjà programmée (grâce à une tâche qui se répète dans le temps). 
+			</p> 
+		</span> 
+	</div> 
+
+	<div id="recuperationManuelle">
+		<form> 
+			<span class="reponse"></span> 
+			<fieldset> 
+				<legend>cette action est sans incidence sur la tâche habitelle</legend> 
+				<input type="submit" value="lancer la récupération" /> 
+			</fieldset>
+		</form> 
+	</div> 
+	
+	<div class="titraille">
+		<h1> 
+			<span class="interrogation">?</span> 
+			Marquer les articles 
+		</h1> 
+		<span class="texte"> 
+			<p> 
+				Si vous souhaitez procéder à un nettoyage en profondeur de votre base d'articles avec les outils du module, cette fonction peut se révéler utile... 
+			</p> 
+		</span> 
+	</div> 
+
+	<div id="etatArticles">
+		<form> 
+			<fieldset> 
+			<span class="reponse"></span> 
+				<legend>êtes-vous sûr de voir marquer comme 'lu' tous vos articles ?</legend><input type="submit" value="modifier l'état des articles" /> 
+			</fieldset>
+		</form> 
+	</div> 
+	
+	<div class="titraille">
+		<h1> 
+			<span class="interrogation">?</span> 
+			Activer tous les flux 
+		</h1> 
+		<span class="texte"> 
+			<p> 
+				Sur les anciens versions du module, une erreur HTTP conduisait l'état du flux sur "inactif". Plus aucun article n'était donc récupéré pour ce flux. désormais, seuls les derniers états HTTP sont gardés. 
+			</p> 
+		</span> 
+	</div> 
+
+	<div id="etatFlux">
+		<form> 
+			<fieldset> 
+			<span class="reponse"></span> 
+				<legend>rendre actifs tous vos flux?</legend><input type="submit" value="modifier l'état des articles" /> 
+			</fieldset>
+		</form> 
+	</div> 
+	
+	<div class="titraille">
+		<h1> 
+			<span class="interrogation">?</span> 
+			Etat de la base de données 
+		</h1> 
+		<span class="texte"> 
+			<p> 
+				<b>Attention</b> : ces opérations touchent sans distinction toute la base ; y compris ceux qui sont épinglés ou mis en favoris. Gardez bien à l'esprit que le fait de vider la base des articles par exemple, sans supprimer les flux, pourrait avoir des conséquences inattendues : les extractions continuant, la base se remplira avec de nouveaux articles. 
+			</p> 
+		</span> 
+	</div> 
+
+	<div id="suppressionItems">
+		<form> 
+			<fieldset> 
+				<legend>type(s) de données à supprimer</legend> 
+				<select name="type"> 
+					<option value="fluxEnregistres">tous les flux</option> 
+					<option value="articles">tous les articles</option> 
+					<option value="fluxEnAttente">tous les flux trouvés (archives)</option> 
+				</select> 
+			</fieldset>
+			<fieldset> 
+				<span class="reponse"></span> 
+				<legend>confirmation</legend> 
+				<input type="submit" value="suppression des items" /> 
+			</fieldset>
+		</form> 
+	</div> 
+	
+	<div class="titraille" important>
+		<h1> 
+			<span class="interrogation">?</span> 
+			Relancer le module 
+		</h1> 
+		<span class="texte"> 
+			<p> 
+				Parfois et malgré le soin apporter à la programmation, il peut arriver que des petits bugs apparaissent. La relance manuelle - qui prend effet immédiatement -, permet parfois de corriger ces défauts temporaires. 
+			</p> 
+			<p> 
+				Une fois le module relancé, il est conseillé de redémarrer le navigateur. 
+			</p> 
+			<p> 
+				<b>Ne tentez pas de relancer le module si cela n'est pas nécessaire</b> : l'arrêt de la connexion du module à sa base <u>peut</u> être brutal et provoquer des pertes de données indésirables. 
+			</p> 
+		</span> 
+	</div> 
+
+	<div id="relanceModule">
+		<form> 
+			<fieldset> 
+				<legend>confirmez-vous arrêter les connexions et relancer du module ?</legend> 
+				<input type="submit" value="relance du module" /> 
+			</fieldset>
+		</form> 
+	</div> 
+	
+	<div class="titraille" important>
+		<h1> 
+			<span class="interrogation">?</span> 
+			Accès au débug 
+		</h1> 
+		<span class="texte"> 
+			<p> 
+				Cela vous donnera l'ensemble des retours du module - ce qui représente <b>une très IMPORTANTE quantité de données</b> à afficher. N'activez cette fonction qu'avec parcimonie et plutôt sur des périphériques fixes. 
+			</p> 
+		</span> 
+	</div> 
+
+	<div id="accesDebug">
+		<form> 
+			<span class="reponse"></span> 
+			<fieldset> 
+				<legend>la fonction fait apparaître les outils sur toutes les pages une fois actif</legend> 
+				<input type="submit" value="inverser l'état du débug" /> 
+			</fieldset>
+		</form> 
+	</div> 
+
+</div> 
+
+</body>
+</html> 

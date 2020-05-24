@@ -60,7 +60,7 @@
 
 #choix { 
 	display: flex; 
-	flex-wrap: wrap;  
+	flex-wrap: wrap; 
 	margin: 0.25rem auto 0.25rem auto; 
 	padding: 0.25rem; 
 	color: rgba(30, 45, 59, 1); 

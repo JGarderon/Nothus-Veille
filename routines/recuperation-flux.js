@@ -1,22 +1,82 @@
 
-self.DEBUG = false; 
 
-self.TravailleurArticleBlob = new Worker( 
-	(
-		(typeof browser=="undefined")?chrome:browser 
-	).extension.getURL( 
-		"./routines/articleBlob.travailleur.js" 
+self.Recuperation = {}; 
+
+self.Recuperation.Taches = []; 
+
+self.Recuperation.alarmeContinuer = true; 
+
+self.Recuperation.alarmeExecuter = (evtAlarme) => { 
+	if (
+		self.Recuperation.Taches.length>1
 	) 
+		(
+			(fct, delais, date) => { 
+				try { 
+					self.DEBUG_log( 
+						"recuperation-flux.js / tentative de lancement d'une tâche", 
+						fct 
+					); 
+					if (Date.now()-date>delais) {
+						fct(); 
+						date = Date.now(); 
+					}
+				} catch(e) { 
+					self.DEBUG_log( 
+						"recuperation-flux.js / erreur dans l'exécution d'une tâche", 
+						[
+							fct, 
+							e 
+						] 
+					); 
+					/*self.Installation.Journaliser( 
+						type, 
+						niveau, 
+						code, 
+						message
+					); */ 
+				} finally {
+					self.Recuperation.Taches.push([ 
+						fct, 
+						delais, 
+						date 
+					]); 
+				} 
+			} 
+		)( 
+			...self.Recuperation.Taches.shift() 
+		); 
+} 
+
+self.Recuperation.alarme = (evtAlarme) => { 
+	if ( 
+		evtAlarme.name=="Recuperation" 
+	& 
+		self.Recuperation.alarmeContinuer 
+	) { 
+		self.DEBUG_log( 
+			"recuperation-flux.js", 
+			"l'alarme s'est déclenchée" 
+		); 
+		self.Recuperation.alarmeExecuter(); 
+	}
+} 
+
+browser.alarms.onAlarm.addListener( 
+	self.Recuperation.alarme 
 ); 
 
-function objStockage(nom, mode) { 
-	return self.db.transaction( 
-		nom, 
-		mode
-	).objectStore( 
-		nom 
-	); 
-} 
+/*---*/ 
+
+self.Recuperation.Travailleurs = { 
+	"travailleurArticleBlob" : new Worker( 
+		(
+			(typeof browser=="undefined")?chrome:browser 
+		).extension.getURL( 
+			"./routines/articleBlob.travailleur.js" 
+		) 
+	) 
+}; 
 
 function Article_extraire(fluxId, fluxTitre, article) { 
 	var lien = detecter_cdata( 
@@ -71,22 +131,22 @@ function Article_extraire(fluxId, fluxTitre, article) {
 } 
 
 function Articles_extraire(fluxId, fluxTitre, doc) { 
-	var objArticle = objStockage( 
+	var objArticle = self.Installation.objStockage( 
 		"articles", 
 		"readwrite" 
 	); 
 	objArticle.transaction.onerror = (evtBDD) => { 
 		evtBDD.preventDefault(); 
-		(self.DEBUG)?console.log(
+		self.DEBUG_log( 
 			"Articles:extraire[erreur(1)]->", evtBDD.target  
-		):null; 
+		); 
 	}
 	doc.querySelectorAll("item").forEach(
 		(item) => { 
 			try { 
-				(self.DEBUG)?console.log(
+				self.DEBUG_log(
 					"Articles:extraire->", item 
-				):null; 
+				); 
 				objArticle.add( 
 					Article_extraire( 
 						fluxId, 
@@ -95,9 +155,9 @@ function Articles_extraire(fluxId, fluxTitre, doc) {
 					) 
 				).onerror = (evtBDD) => { 
 					evtBDD.preventDefault(); 
-					(self.DEBUG)?console.log(
+					self.DEBUG_log(
 						"Articles:extraire[erreur(2)]->", evtBDD.target  
-					):null; 
+					); 
 				}; 
 			} catch(e) {} 
 		} 
@@ -110,19 +170,17 @@ function Flux_recuperer(objFlux, StockageArticles) {
 	xhr.onreadystatechange = (evt) => {
 		if (xhr.readyState === XMLHttpRequest.DONE) {
 			if (xhr.status === 200) { 
-				(self.DEBUG)?console.log(
+				self.DEBUG_log(
 					"Flux:recuperer->", objFlux.id 
-				):null; 
+				); 
 				Articles_extraire( 
 					objFlux.id, 
 					objFlux.site, 
 					xhr.responseXML 
 				); 
-			} else { 
-				objFlux.actif = false; 
 			} 
 			objFlux.etat = "HTTP-"+xhr.status.toString(); 
-			objStockage( 
+			self.Installation.objStockage( 
 				"flux", 
 				"readwrite"
 			).put( 
@@ -138,99 +196,138 @@ function Flux_recuperer(objFlux, StockageArticles) {
 }
 
 function Flux_extraire() { 
-	if (self.VerrouFlux) 
-		return; 
-	(self.DEBUG)?console.log(
+	self.DEBUG_log(
 		"Flux:extraire->démarrage" 
-	):null; 
+	); 
 	self.VerrouFlux = true; 
-	objStockage( 
+	self.Installation.objStockage( 
 		"flux", 
 		"readwrite"
 	).openCursor().onsuccess = (evt) => { 
 		var curseur = evt.target.result;
       	if(curseur) { 
       		try { 
-				(self.DEBUG)?console.log(
+				self.DEBUG_log( 
 					"Flux:extraire->", curseur.value 
-				):null; 
+				); 
       			if (curseur.value.actif==true)
 	      			Flux_recuperer( 
 		      			curseur.value 
 		      		); 
 	      	} catch(e) { 
-	      		console.log("err 1 recuperation-flux.js", e); 
+				self.DEBUG_log(
+		  			"recuperation-flux.js / Flux_extraire -> erreur", 
+		  			e 
+	  			); 
 	      	}
       		curseur.continue(); 
-      	} else { 
-      		self.VerrouFlux = false; 
-      	}
+      	} 
 	}; 
 } 
 
+self.Recuperation.XHR = []; 
+self.Recuperation.XHR_purge = () => { 
+	self.Recuperation.XHR = self.Recuperation.XHR.filter( 
+		(xhr) => { 
+			if (xhr.readyState === XMLHttpRequest.DONE) 
+				return false; 
+			return true; 
+		} 
+	); 
+}; 
+
 function Article_blob() { 
-	if (self.VerrouArticles) 
-		return; 
-	(self.DEBUG)?console.log(
-		"Article:blob->démarrage" 
-	):null; 
-	self.VerrouArticles = true; 
-	objStockage( 
+	self.DEBUG_log( 
+		"recuperation-flux.js", 
+		"Article:blob-> démarrage" 
+	); 
+	self.Recuperation.XHR_purge(); 
+	self.DEBUG_log( 
+		"recuperation-flux.js", 
+		"Article:blob-> purge des anciennes requêtes XHR" 
+	); 
+	self.URL_test = new RegExp(/^http/); 
+	self.Installation.objStockage( 
 		"articles", 
 		"readonly"
 	).openCursor().onsuccess = (evt) => { 
 		var curseur = evt.target.result;
-		(self.DEBUG)?console.log(
-			"Article:blob->", curseur.value 
-		):null;
+		self.DEBUG_log( 
+			"recuperation-flux.js", 
+			"Article:blob-> traitement d'articleId = ", curseur.value.id 
+		); 
       	if(curseur) { 
+      		var article = curseur.value; 
       		try { 
-      			if (curseur.value.articleImage==="") 
+      			if (article.articleImage==="") 
       				return; 
-  				if (curseur.value.articleImageBlob==="") 
-	      			self.TravailleurArticleBlob.postMessage(
-	      				curseur.value 
-	      			); 
+      			if (typeof article["articleImageBlob"]=="undefined") 
+      				article.articleImageBlob = ""; 
+  				if ( 
+  					article.articleImageBlob==""
+  				& 
+  					article.articleImageBlob!==false
+  				) {
+  					var xhr = new XMLHttpRequest(); 
+					xhr.responseType = "blob"; 
+					xhr.onreadystatechange = () => { 
+						if (xhr.readyState === XMLHttpRequest.DONE) { 
+							article.articleImageBlob = (xhr.status==200)? 
+								xhr.response 
+							: 
+								false 
+							; 
+							self.Installation.objStockage( 
+								"articles", 
+								"readwrite"
+							).put( 
+								article 
+							).onsuccess = () => { 
+								self.DEBUG_log( 
+									"recuperation-flux.js", 
+									"Article:blob-> enregistrement d'articleId = ", article.id 
+								); 
+							}; 
+						} 
+					} 
+					xhr.open( 
+						"GET", 
+						article.articleImage  
+					);
+					xhr.send(); 
+					self.Recuperation.XHR.push( 
+						xhr 
+					); 
+					self.DEBUG_log( 
+						"recuperation-flux.js", 
+						"Article:blob-> XHR enregistré pour l'articleId = ", article.id 
+					); 
+  				} 
 	      	} catch(e) { 
-	      		console.log("err 2 recuperation-flux.js", e); 
+				self.DEBUG_log(
+		  			"recuperation-flux.js / Article_blob -> erreur", 
+		  			e 
+	  			); 
 	      	}
       		curseur.continue(); 
-      	} else { 
-      		self.VerrouArticles = false; 
-      	}
+      	} 
 	}; 
 }
 
-function Taches() { 
-	Flux_extraire(); 
-	Article_blob(); 
-}
+/*---*/ 
 
-self.VerrouFlux = false; 
-self.VerrouArticles = false; 
-self.IntervalDuree = 60000; 
-self.IntervalId = null; 
+self.Recuperation.Taches.push( 
+	[ 
+		Flux_extraire, 
+		600000, 
+		Date.now() 
+	] 
+); 
 
-function __chargement_recuperationflux__() { 
-	var r = self.indexedDB.open( 
-		"Nothus-RSS", 
-		self.BDD_version 
-	); 
-	r.onsuccess = (event) => {
-		self.db = event.target.result; 
-		Flux_extraire(); 
-		self.IntervalId = setInterval( 
-			Taches, 
-			self.IntervalDuree 
-		); 
-	}; 
-	r.onerror = (event) => { 
-		console.log("La base n'est pas encore prête pour la récupération des flux ; nouvelle tentative dans 10 secondes."); 
-		setTimeout( 
-			__chargement_recuperationflux__, 
-			10000 
-		); 
-	}
-} 
-
-__chargement_recuperationflux__(); 
+self.Recuperation.Taches.push( 
+	[ 
+		Article_blob, 
+		180000, 
+		Date.now() 
+	] 
+); 

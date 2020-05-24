@@ -4,13 +4,17 @@ function Page_charger(pId, _SuiteOk) {
 	xhr.overrideMimeType('text'); 
 	xhr.onreadystatechange = (evt) => {
 		if (xhr.readyState === XMLHttpRequest.DONE) {
-			if (xhr.status === 200) 
+			if (xhr.status === 200) { 
 				_SuiteOk( 
 					new DOMParser().parseFromString( 
 						evt.target.responseText, 
 						"text/html" 
 					) 
 				); 
+			} else { 
+				alert("Cette page n'existe pas !"); 
+				window.location.href = "./gabarit.html"; 
+			}
 		} 
 	} 
 	xhr.open("GET", "./pages/"+pId+"/index.gabarit.html");

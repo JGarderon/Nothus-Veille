@@ -3,7 +3,7 @@
     "name": "Nothus-Veille",
     "short_name": "NothusVeille", 
     "description": "Outil d'aide à la veille.",
-    "version": "1.1.5",
+    "version": "1.2.9",
     "homepage_url": "https://github.com/JGarderon/Nothus-Veille",
     "icons": { 
         "48": "logo.png"
@@ -17,7 +17,8 @@
         "default_icon": "logo.png" 
     }, 
 
-    "permissions": [
+    "permissions": [ 
+        "alarms", 
         "storage", 
         "unlimitedStorage", 
         "notifications", 

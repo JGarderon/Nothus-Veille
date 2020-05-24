@@ -1,17 +1,117 @@
 
-// version inférieure à 1.1 : aucun 
-// version 1.1 / 1.1.1 : 2 
-// version 1.1.2 : 3 
-// version 1.1.5 : 4 
-self.BDD_version = 4; 
+
+if (self.localStorage.getItem("RSS.DEBUG")==null) 
+	self.localStorage.setItem( 
+		"RSS.DEBUG", 
+		"0" 
+	); 
+
+self.DEBUG = self.localStorage.getItem("RSS.DEBUG"); 
+self.DEBUG_log = (...args) => { 
+	if (self.DEBUG=="1") { 
+		browser.runtime.sendMessage({ 
+			"type": "debugMessage", 
+			"contenu" : args 
+		}); 
+		console.log(...args); 
+	} 
+} 
+
 /*---*/ 
 
-( 
-	(typeof browser=="undefined")?chrome:browser 
-).browserAction.onClicked.addListener(() =>{ 
-	( 
-		(typeof browser=="undefined")?chrome:browser 
-	).tabs.create({
+self.BDD = null; 
+
+/*---*/ 
+
+self.__CHARGEMENTS__ = []; 
+
+/*---*/ 
+
+self.relanceModule = (delais) => { 
+	console.log( 
+		"communes.js", 
+		"(!) AMORCE DU REDEMARRAGE DU MODULE" 
+	); 
+	var _fct = (tabs) => { 
+		var racine = browser.extension.getURL("./"); 
+		tabs.forEach( 
+			(tab) => { 
+				browser.tabs.get(tab.id).then(
+					(infos) => { 
+						if (infos.url.indexOf(racine)==0) 
+							browser.tabs.sendMessage(
+						      infos.id,
+						      {
+						      	"action" : "alerte", 
+						      	"message" : "Attention : une relance est programmée et le module va être prochainement redémarré. La connexion à la base de données va être temporairement perdue." 
+						      }
+						    ); 
+					}
+				); 
+			} 
+		); 
+	}; 
+	browser.tabs.query( 
+		{ 
+			currentWindow: true 
+		} 
+	).then(
+		_fct 
+	); 
+	setTimeout(
+		() => { 
+			console.log( 
+				"communes.js", 
+				"(!) REDEMARRAGE IMMEDIAT DU MODULE" 
+			); 
+			browser.alarms.clearAll(); 
+			self.BDD.close(); 
+			browser.runtime.reload(); 
+		}, 
+		delais
+	); 
+}
+
+/*---*/ 
+
+self.browser = (typeof self.browser=="undefined")?
+	self.chrome
+: 
+	self.browser 
+; 
+
+browser.runtime.onInstalled.addListener( 
+	(evt) => { 
+		browser.tabs.create( 
+			{ 
+				"url": browser.runtime.getURL( 
+					"./bienvenue.html" 
+				) 
+			} 
+		); 
+		notifier( 
+			`Nothus-Veille : module installé ou mis à jour`, 
+			`Votre module a été mis à jour. Les informations mettront peut-être quelques instants à s'afficher.`
+		); 
+	}
+); 
+
+browser.runtime.onUpdateAvailable.addListener(
+	(details) => { 
+		notifier( 
+			`Nothus-Veille : mise à jour urgente - version ${details.version}`, 
+			`Une mise à jour du module sera installée d'ici 1 minute. Votre module va être relancé.`
+		); 
+		relanceModule( 
+			60000 
+		); 
+	}
+); 
+
+/*---*/ 
+
+browser.browserAction.onClicked.addListener(() =>{ 
+	browser.tabs.create({ 
 		url: "/gabarit.html"
 	});
 });
@@ -85,28 +185,6 @@ function gerer_action_fluxTmpAjouter(items) {
 	return nbre; 
 } 
 
-(
-	(typeof browser=="undefined")?chrome:browser 
-).runtime.onMessage.addListener((message) => { 
-    if (typeof message=="object") 
-        switch(message["type"]) { 
-            default: 
-                break; 
-            case "flux_ajouter": 
-            	var nbre = gerer_action_fluxTmpAjouter(message["items"]); 
-            	if (nbre>0) 
-	                return notifier( 
-	                    "Nothus-Veille - information", 
-	                    (
-	                    	(nbre>1)?nbre.toString():"Un"
-	                    )+" nouveau"+( 
-	                    	(nbre>1)?"x":"" 
-	                    )+" flux RSS découverts !" 
-	                ); 
-                break; 
-        }  
-}); 
-
 /*---*/ 
 
 function CleSecurite(nbre_pair) { 
@@ -137,4 +215,43 @@ function detecter_cdata(texte) {
 		"" 
 	); 
 } 
+
+/*---*/ 
+
+function Article_recuperer_RSS(article) { 
+	var lien = article.getElementsByTagName("link")[0].innerHTML; 
+	var titre = detecter_cdata( 
+		article.getElementsByTagName("title")[0].innerHTML 
+	); 
+	var description = detecter_cdata( 
+		article.getElementsByTagName("description")[0].innerHTML 
+	); 
+	var pubDate = article.getElementsByTagName("pubDate")[0].innerHTML; 
+	try { 
+		var lienPermanent = article.getElementsByTagName("guid")[0].innerHTML; 
+	} catch(e) { 
+		var lienPermanent = lien; 
+	} 
+	try {
+		var image = article.getElementsByTagName("enclosure")[0].getAttribute("url"); 
+	} catch(e) { 
+		var image = ""; 
+	} 
+	try {
+		var auteur = article.getElementsByTagName("author")[0].getAttribute("url"); 
+	} catch(e) { 
+		var auteur = ""; 
+	} 
+	return { 
+		"lien": lien, 
+		"titre": titre, 
+		"description": description, 
+		"pubDate": pubDate, 
+		"lienPermanent": lienPermanent, 
+		"image": image 
+	}; 
+} 
+
+/*---*/ 
+
 

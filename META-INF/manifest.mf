@@ -1,0 +1,237 @@
+Manifest-Version: 1.0
+
+Name: bienvenue.css
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: 0unFwh5pv/FYDU9KK53EhQ==
+SHA1-Digest: Wlbr83NxoObE6Z9kPQOIOwUWmb0=
+
+Name: bienvenue.html
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: cVrDvjfJg1u/27krQBCKlQ==
+SHA1-Digest: F/xsOd80XUHbcrPHt/TdM05LQio=
+
+Name: commun.css
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: s9nDLgczaNE8Eehuur+IPg==
+SHA1-Digest: 8p7n35dC06DOOellCwzjNmZbUxM=
+
+Name: commun.js
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: d8V4rb25dU0B7R55ken+rQ==
+SHA1-Digest: +R/CFkrd64xLNUUlTPJSk0S0BdE=
+
+Name: gabarit.css
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: ov6Xp1F7K7y5Yz+4iL7ajg==
+SHA1-Digest: BWCEarWcdg2Rz0q341l3ZE7wV5M=
+
+Name: gabarit.html
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: VPCp7avKJabgRX622S0tTQ==
+SHA1-Digest: 5UmtKttkoM9sj9oGJge3SRFxldc=
+
+Name: gabarit.js
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: JBghQ9cgfOsMy3d3ojG20A==
+SHA1-Digest: PfrXUFA03FI0GbfN2iaoSNvfAsg=
+
+Name: logo.png
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: dIcyTgCY1RY+4WXmYiYFTw==
+SHA1-Digest: mrXAPJc83t+0HctcP8LiFMjKNkw=
+
+Name: manifest.json
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: 3ShqcKzT3IdvJHKnsvdV/w==
+SHA1-Digest: AWoJSuqpfL/XhGqrsdZ6FctZbeE=
+
+Name: modules/articles.module.js
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: x4Y4vfww2Nwp94lxoXrAzg==
+SHA1-Digest: ECMu8YPM5g7csCDCNAe9zedgd4E=
+
+Name: modules/export.module.js
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: bwZZhW5yJdsxQFtQvBG+jA==
+SHA1-Digest: iqS8VTEZrNhqJ4V19ZVjrLWcglw=
+
+Name: modules/favorissync.module.js
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: vviu/c2HhSKNtJGRUvV/vA==
+SHA1-Digest: JunmIcirOVlXOnKvGAMNZGZdyPg=
+
+Name: modules/gabarit.module.js
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: +73/B+8usnPkB1gwMYlWeg==
+SHA1-Digest: AdsDEWte71llloen+FblobmK99o=
+
+Name: modules/opml.module.js
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: j+DxalrmNo9skFpaQDNBCw==
+SHA1-Digest: 1MyDzh7CinoKeggf2AyKboPjlDI=
+
+Name: modules/pagecalques.module.js
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: 1iI1zuhBsJuN6qdF3ltCdA==
+SHA1-Digest: +tRjk1OyMKBVOcAb7CYkL7gQdyg=
+
+Name: modules/rapport.export.page.html
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: nIzrHcaK3hFSuwkbKKqRpQ==
+SHA1-Digest: K9F4fahiusQRxLmemImx8B1KDtc=
+
+Name: pages/aide/index.gabarit.html
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: NRK2Oo4VjIDyECBK5syMFw==
+SHA1-Digest: F2GAHYq6VOTqfsyXWKirU3rBNwU=
+
+Name: pages/aide/page.css
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: iSStR3rMfcW6oduO+xXx/A==
+SHA1-Digest: uZJWHpwV5X5BIYlKCid5AOeX1zI=
+
+Name: pages/aide/page.js
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: 3MdnNPNucZOyfwf2JbrJ+w==
+SHA1-Digest: ph55snVooPtfGfuggvmVjFsC6NY=
+
+Name: pages/debug/index.gabarit.html
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: hE+uoyHy/7r9ot6/jO0ZYw==
+SHA1-Digest: GgH8jduUUGx13HmD7wFjyRJ96AQ=
+
+Name: pages/debug/page.css
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: J/CnnL9DBx+7fmip4jS4nQ==
+SHA1-Digest: dmC2zbL2ppNLLp/uXJ8fqRlspBI=
+
+Name: pages/debug/page.js
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: /SP4JJVtx6/679h31hy+IA==
+SHA1-Digest: MCqPRLo2tnSj7rSmVc9o7nC5fDs=
+
+Name: pages/notes/index.gabarit.html
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: wp9bPYQa3h89pFsaUJ5xHQ==
+SHA1-Digest: jqK7AjW6I6tBClb35fmKShEQ+YI=
+
+Name: pages/notes/page.css
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: rn4zO5ztkkgNQdnqXsXLig==
+SHA1-Digest: PUxqMf5R6W3Ryunt3tXkfE0VGEc=
+
+Name: pages/notes/page.js
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: dGcwQ/0L0LAqA2mqw6uqeA==
+SHA1-Digest: qnT0AmWKYllc76P7qC+06Pfzv0k=
+
+Name: pages/options/index.gabarit.html
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: ddCm/FcS4prFFVWUh1lNAQ==
+SHA1-Digest: dXzmk80bytdvI11HuuqnCFzRtT4=
+
+Name: pages/options/page.css
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: fytH4/oKOKvvtyGKxf9p6g==
+SHA1-Digest: EJ1F/kug8mOB1OFRzQ+OMgNZQ2s=
+
+Name: pages/options/page.js
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: PklNnors82RJZJRFxnQwHw==
+SHA1-Digest: wpBu65+Z9nNW/npZCiV7CkmKYz8=
+
+Name: pages/outils/index.gabarit.html
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: JTdKgcUsIV2Ig9yh9beaDg==
+SHA1-Digest: stIHjxNVLy9SIM7DpdfMlCG28gs=
+
+Name: pages/outils/page.css
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: UV0nOaTZ4e3sQ+GWBh3SjA==
+SHA1-Digest: HQvo5xWYXZpsFP68iShCEQ1KhL0=
+
+Name: pages/outils/page.js
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: qu6/izwVELYejX6Fmi6GIQ==
+SHA1-Digest: jlvSTnxPKUS+0tv+81cmQdIJKx4=
+
+Name: pages/recherche/index.gabarit.html
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: ps8jU0IaaeWhRxJtnXC6wQ==
+SHA1-Digest: j5nA364SnRs0N+fHM+klLxcpTqE=
+
+Name: pages/recherche/page.css
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: GN8/70f1LaI8U0tOd9hsnw==
+SHA1-Digest: 5kNiydzq2pt6KIXi9np6/eGtuK8=
+
+Name: pages/recherche/page.js
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: 1o2/oCOlwpDXbUM1EJa2lg==
+SHA1-Digest: 68WmbyQTtbXKIZFt36YrTRjp9DA=
+
+Name: pages/recuperateur/index.gabarit.html
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: xlvwY6op5m8UMQ/0GLHz3A==
+SHA1-Digest: B29aDMxTXZGURObaZ5YdnsMQf+w=
+
+Name: pages/recuperateur/page.css
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: XP2z7es5+Fb6t903NuTXTg==
+SHA1-Digest: yRman93i6rJz+JVgtE3oJ+I8MqE=
+
+Name: pages/recuperateur/page.js
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: VcUShPKusmAPNZWMO6nttA==
+SHA1-Digest: hmA+4XNceNTFRMWoc3qDjtnL9fU=
+
+Name: pages/sources/index.gabarit.html
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: ig8JqxzJRXd12nnWrU5iSA==
+SHA1-Digest: Czf6b6/oaonklgEaJ3wBAeLDqAU=
+
+Name: pages/sources/page.css
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: KWewTOJczgmqYrZCpbfAwg==
+SHA1-Digest: hTNpxBmtrA2A0UeOQOrK4NNDmWM=
+
+Name: pages/sources/page.js
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: BvAIQJJsI7bQ6AIPYDBn6g==
+SHA1-Digest: Ix3wUDG8gnT3i2ru0YVRV/55F40=
+
+Name: routines/communes.js
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: 7fyvcwgrIHChRl4UxnO3/w==
+SHA1-Digest: nbeAnwotJOsMimI3TJ4CO4eUmRI=
+
+Name: routines/dialogues.js
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: cWzGfaWLqxt1W54+f02nbQ==
+SHA1-Digest: RfGjF6kX6T4xluEty3oYm1x4EyU=
+
+Name: routines/installation.js
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: tqFNRODQEyn2wqxX/theAw==
+SHA1-Digest: TTFKW9B7y2syu464zBuCG2U/hus=
+
+Name: routines/optimisations.js
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: rsnNDXMbzOqUyDS/OQURCw==
+SHA1-Digest: JEaLbPE+eSvjmYZ6iHgnOriNQ+4=
+
+Name: routines/recherche-flux.js
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: eoyFQxtY4MqcnO8uw4cSZw==
+SHA1-Digest: HEyE5bU4h+vXO6C+k5z8C1334wk=
+
+Name: routines/recuperation-flux.js
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: 9kV75GxxNE4WdzTHw6z2fw==
+SHA1-Digest: xPsVuspco2JJQLtTcMe4EiBX/yc=
+
+Name: routines/routines.html
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: kLqLaIB1AjcxZVxILvLdHQ==
+SHA1-Digest: koK32RBFUBzhlDG/TgMkfFLy5m0=
+

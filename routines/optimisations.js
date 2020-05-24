@@ -2,45 +2,179 @@
 self.Optimisations = {}; 
 
 self.Optimisations.Taches = []; 
-self.Optimisations.Taches_i = 0; 
-self.Optimisations.Taches_realisation = function() { 
-	var tab = self.Optimisations.Taches; 
-	var i = self.Optimisations.Taches_i; 
-	if (typeof tab[i]!="undefined") {
-		try { 
-			tab[i](); 
-		} catch(e) { 
-			console.log( 
-				`Optimisations / Erreur rencontrée !`, 
-				e 
-			); 
-		} 
-		self.Optimisations.Taches_i++; 
-	} else { 
-		self.Optimisations.Taches_i = 0; 
-		setTimeout( 
-			self.Optimisations.Taches_realisation, 
-			360000 
+
+self.Optimisations.alarmeContinuer = true; 
+
+self.Optimisations.alarmeExecuter = (evtAlarme) => { 
+	if (
+		self.Optimisations.Taches.length>1
+	) 
+		(
+			(fct, delais, date) => { 
+				try { 
+					self.DEBUG_log( 
+						"optimisations.js / tentative de lancement d'une tâche", 
+						fct 
+					); 
+					if (Date.now()-date>delais) {
+						fct(); 
+						date = Date.now(); 
+					}
+				} catch(e) { 
+					self.DEBUG_log( 
+						"optimisations.js / erreur dans l'exécution d'une tâche", 
+						[
+							fct, 
+							e 
+						] 
+					); 
+					/*self.Installation.Journaliser( 
+						type, 
+						niveau, 
+						code, 
+						message
+					); */ 
+				} finally {
+					self.Optimisations.Taches.push([ 
+						fct, 
+						delais, 
+						date 
+					]); 
+				} 
+			} 
+		)( 
+			...self.Optimisations.Taches.shift() 
 		); 
+} 
+
+self.Optimisations.alarme = (evtAlarme) => { 
+	if ( 
+		evtAlarme.name=="Optimisations" 
+	& 
+		self.Optimisations.alarmeContinuer 
+	) { 
+		self.DEBUG_log( 
+			"optimisations.js", 
+			"l'alarme s'est déclenchée" 
+		); 
+		self.Optimisations.alarmeExecuter(); 
 	}
+} 
+
+browser.alarms.onAlarm.addListener( 
+	self.Optimisations.alarme 
+); 
+
+/*---*/ 
+
+self.Optimisations.MaJ_Cache = function (cle, valeur) { 
+	var stats = JSON.parse( 
+		self.localStorage.getItem( 
+			"RSS.statistiques" 
+		) 
+	); 
+	if (stats==null) 
+		stats = {}; 
+	stats[cle] = valeur; 
+	self.localStorage.setItem( 
+		"RSS.statistiques", 
+		JSON.stringify( 
+			stats  
+		) 
+	); 
 }; 
 
+self.Optimisations.nbreFlux = function () { 
+	var objS = self.Installation.objStockage( 
+		"flux", 
+		"readonly" 
+	); 
+	objS.transaction.oncomplete = (evt) => { 
+		self.DEBUG_log( 
+			`Optimisations / tâche "nbreFlux" terminée.` 
+		); 
+	}; 
+	objS.count().onsuccess = (evtBDD) => {
+		self.Optimisations.MaJ_Cache( 
+			"nbreFlux", 
+			parseInt(evtBDD.target.result) 
+		); 
+	}; 
+} 
+self.Optimisations.Taches.push( 
+	[ 
+		self.Optimisations.nbreFlux, 
+		15000, 
+		Date.now() 
+	] 
+); 
+
+self.Optimisations.nbreArticles = function () { 
+	var objS = self.Installation.objStockage( 
+		"articles", 
+		"readonly" 
+	); 
+	objS.transaction.oncomplete = (evt) => { 
+		self.DEBUG_log( 
+			`Optimisations / tâche "nbreArticles" terminée.` 
+		); 
+	}; 
+	objS.count().onsuccess = (evtBDD) => {
+		self.Optimisations.MaJ_Cache( 
+			"nbreArticles", 
+			parseInt(evtBDD.target.result) 
+		); 
+	}; 
+} 
+self.Optimisations.Taches.push( 
+	[ 
+		self.Optimisations.nbreArticles, 
+		15000, 
+		Date.now() 
+	] 
+); 
+
+self.Optimisations.nbreFluxAttentes = function () { 
+	var nbre = 0; 
+	var fluxTmpTous = JSON.parse( 
+		self.localStorage.getItem( 
+			"RSS.flux.temporaires" 
+		) 
+	); 
+	for (var cle in fluxTmpTous) { 
+		if ( 
+			!fluxTmpTous[cle].dejaAjoute 
+		) 
+			nbre++; 
+	} 
+	self.Optimisations.MaJ_Cache( 
+		"nbreFluxAttente", 
+		nbre 
+	); 
+	self.DEBUG_log( 
+		`Optimisations / tâche "nbreFluxAttentes" terminée.` 
+	); 
+} 
+self.Optimisations.Taches.push( 
+	[ 
+		self.Optimisations.nbreFluxAttentes, 
+		15000, 
+		Date.now() 
+	] 
+); 
 
 self.Optimisations.Flux = {}; 
 self.Optimisations.fluxExtraire = function () { 
-	var t = self.Optimisations.db.transaction(
+	var objS = self.Installation.objStockage( 
 		"flux", 
 		"readwrite" 
 	); 
-	t.oncomplete = (evt) => { 
-		self.Optimisations.Taches_realisation(); 
+	objS.transaction.oncomplete = (evt) => { 
+		self.DEBUG_log( 
+			`Optimisations / tâche "fluxExtraire" terminée.` 
+		); 
 	}; 
-	console.log( 
-		`Optimisations / tâche "fluxExtraire" terminée.` 
-	); 
-	t.objectStore( 
-		"flux" 
-	).openCursor().onsuccess = (evtBDD) => {
+	objS.openCursor().onsuccess = (evtBDD) => {
 		var curseur = evtBDD.target.result; 
 		if (curseur) { 
 			self.Optimisations.Flux[curseur.value.id] = curseur.value.site; 
@@ -48,24 +182,25 @@ self.Optimisations.fluxExtraire = function () {
 		} 
 	}; 
 } 
-self.Optimisations.Taches.push(
-	self.Optimisations.fluxExtraire 
+self.Optimisations.Taches.push( 
+	[ 
+		self.Optimisations.fluxExtraire, 
+		59000, 
+		Date.now() 
+	] 
 ); 
 
 self.Optimisations.articleFluxTitre = function () { 
-	var t = self.Optimisations.db.transaction(
+	var objS = self.Installation.objStockage( 
 		"articles", 
 		"readwrite" 
 	); 
-	t.oncomplete = (evt) => { 
-		console.log( 
+	objS.transaction.oncomplete = (evt) => { 
+		self.DEBUG_log( 
 			`Optimisations / tâche "articleFluxTitre" terminée.` 
 		); 
-		self.Optimisations.Taches_realisation(); 
 	}; 
-	t.objectStore( 
-		"articles" 
-	).openCursor().onsuccess = (evtBDD) => { 
+	objS.openCursor().onsuccess = (evtBDD) => { 
 		var curseur = evtBDD.target.result; 
 		if (curseur) { 
 			var titre = self.Optimisations.Flux[
@@ -73,14 +208,12 @@ self.Optimisations.articleFluxTitre = function () {
 			]; 
 			if (titre!=curseur.value["flux.titre"]) { 
 				curseur.value["flux.titre"] = titre; 
-				console.log( 
+				self.DEBUG_log( 
 					`Optimisations / tâche "articleFluxTitre" :`, 
 					curseur.value["flux.titre"],
 					titre 
 				); 
-				t.objectStore( 
-					"articles" 
-				).put( 
+				objS.put( 
 					curseur.value
 				); 
 			} 
@@ -88,31 +221,10 @@ self.Optimisations.articleFluxTitre = function () {
 		} 
 	}; 
 } 
-self.Optimisations.Taches.push(
-	self.Optimisations.articleFluxTitre 
+self.Optimisations.Taches.push( 
+	[ 
+		self.Optimisations.articleFluxTitre, 
+		59000, 
+		Date.now() 
+	] 
 ); 
-
-
-self.Optimisations.__chargement__ = function () { 
-	var r = self.indexedDB.open( 
-		"Nothus-RSS", 
-		self.BDD_version 
-	); 
-	r.onsuccess = (event) => {
-		self.Optimisations.db = event.target.result; 
-		self.Optimisations.Taches_realisation(); 
-	}; 
-	r.onerror = (event) => { 
-		console.log( 
-			`Optimisations / La base n'est pas encore prête pour 
-			la récupération des flux ; nouvelle tentative dans 
-			10 secondes.` 
-		); 
-		setTimeout( 
-			self.Optimisations.__chargement__, 
-			10000 
-		); 
-	}
-} 
-
-self.Optimisations.__chargement__(); 

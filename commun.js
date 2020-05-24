@@ -1,7 +1,4 @@
 
-// version 1.1.5 : 4 
-window.BDD_version = 4; 
-
 window.ENCOURS = true; 
 window.addEventListener("beforeunload", (evt) => { 
 	if (!window.ENCOURS) 
@@ -18,6 +15,59 @@ function Chargement(visible) {
 		"none" 
 	; 
 } 
+
+/*---*/ 
+
+function DEBUG_etat(etat) { 
+	window.DEBUG_el = document.querySelector("#debug"); 
+	window.DEBUG_el.setAttribute(
+		"debug", 
+		(etat=="1")? 
+			"ouvert" 
+		: 
+			"ferme" 
+	); 
+} 
+function DEBUG_ajouter(message) { 
+	var elP = window.DEBUG_el.querySelector("section.messages"); 
+	var p = document.createElement( 
+		"p" 
+	); 
+	p.appendChild( 
+		document.createTextNode( 
+			String(message) 
+		) 
+	); 
+	if (elP.firstChild!=null) { 
+		elP.insertBefore( 
+			p, 
+			elP.firstChild 
+		); 
+	} else { 
+		elP.appendChild( 
+			p 
+		); 
+	} 
+} 
+
+browser.runtime.onMessage.addListener( 
+	(message, expediteur, destinataire) => { 
+		if ( 
+			typeof message=="object" 
+		& 
+			message["type"]=="debugMessage" 
+		& 
+			window.localStorage.getItem( 
+				"RSS.DEBUG" 
+			)=="1" 
+		) 
+			DEBUG_ajouter( 
+				message["contenu"] 
+			); 
+	} 
+); 
+
+/*---*/ 
 
 function ERREURGENERALE(m) { 
 	try { 
@@ -47,6 +97,8 @@ function ERREURGENERALE(m) {
 		10000 
 	); 
 } 
+
+window.ImagesBlog = {}; 
 
 function Gabarit_retrouver(nom) { 
 	var Gabs = document.getElementsByTagName("style"); 
@@ -219,6 +271,40 @@ function itemActionner(
 	} 
 } 
 
+function itemsVider( 
+	table, 
+	action, 
+	_SuiteOk, 
+	_SuiteKo  
+) { 
+	try { 
+		var r = window.db.transaction( 
+			table, 
+			"readwrite"
+		).objectStore( 
+			table  
+		).clear(); 
+		r.onsuccess = (evtBDD) => { 
+			evtBDD.preventDefault(); 
+			if (typeof _SuiteOk=="function") 
+				return _SuiteOk( 
+					evtBDD.target.result 
+				); 
+		}; 
+		r.onerror = (evtBDD) => { 
+			evtBDD.preventDefault(); 
+			if (typeof _SuiteKo=="function") 
+				_SuiteKo( 
+					evtBDD.target 
+				); 
+		}; 
+	} catch(e) { 
+		_SuiteKo( 
+			e 
+		); 
+	} 
+} 
+
 function itemEnregistrer( 
 	table, 
 	nouveau, 
@@ -279,19 +365,23 @@ function itemsExtraire(
 
 window.Pages = {}; 
 
-if (self.localStorage.getItem("RSS.flux.temporaires")==null) 
-	self.localStorage.setItem("RSS.flux.temporaires", JSON.stringify({})); 
+if (window.localStorage.getItem("RSS.flux.temporaires")==null) 
+	window.localStorage.setItem("RSS.flux.temporaires", JSON.stringify({})); 
 
-if (self.localStorage.getItem("RSS.statistiques")==null) 
-	self.localStorage.setItem("RSS.statistiques", JSON.stringify({})); 
+if (window.localStorage.getItem("RSS.statistiques")==null) 
+	window.localStorage.setItem("RSS.statistiques", JSON.stringify({})); 
 
-if (self.localStorage.getItem("RSS.gabarits")==null) 
-	self.localStorage.setItem("RSS.gabarits", JSON.stringify({ 
+if (window.localStorage.getItem("RSS.gabarits")==null) 
+	window.localStorage.setItem("RSS.gabarits", JSON.stringify({ 
 		"notes": {"style":"", "contenu": "", "variables": {}}, 
 		"rapports": {"style":"", "contenu": "", "variables": {}, "notes": []} 
 	})); 
 
 function __chargement_commun__() { 
+
+	DEBUG_etat( 
+		window.localStorage.getItem("RSS.DEBUG") 
+	); 
 	
 	/*--- gestion du titre de la page -> renvoi vers le gabarit initial ---*/ 
 	document.querySelector("header h1").addEventListener( 
@@ -305,7 +395,8 @@ function __chargement_commun__() {
 	/*--- gestion de la titraille ---*/ 
 	HTML_titraille(); 
 
-}
+} 
+
 
 if (document.readyState=="loading") { 
 	window.addEventListener( 

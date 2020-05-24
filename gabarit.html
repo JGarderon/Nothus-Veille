@@ -27,9 +27,9 @@
 		<li> 
 			<a href="?page=notes" page="notes">notes</a> 
 		</li> 
-		<!--li> 
+		<li> 
 			<a href="#" page="options">options</a> 
-		</li-->
+		</li>
 		<li> 
 			<a href="?page=aide" page="aide">aide</a> 
 		</li> 
@@ -41,7 +41,7 @@
 	<div id="statistiques" class="article"> 
 		<ul> 
 			<li> 
-				Statistiques rafraîchies toutes les minutes... 
+				Statistiques rafraîchies régulièrement... 
 			</li> 
 			<li>
 				<span id="nbre_flux">?</span> flux enregistré(s) 
@@ -69,11 +69,30 @@
 
 	<div id="ajout" class="article">
 		<span>+</span> 
-	</div>
+	</div> 
+
+	<div id="extrait"> 
+		<span class="conteneur"> 
+			<span class="action"> 
+				<a href="#"> 
+					fermer 
+				</a> 
+			</span> 
+			<span class="contenu"> 
+				<span class="titre"></span> 
+				<span class="url"></span> 
+				<span class="explications"> 
+					Le texte ci-dessous est une tentative d'extraction automatique de la ressource distante. 
+				</span> 
+				<span class="extrait"></span> 
+			</span> 
+		</span> 
+	</div> 
 
 	<div id="choixVue"> 
 		<span class="liste"></span> 
 	</div> 
+
 
 </div> 
 
@@ -81,10 +100,30 @@
 	<section class="message"> 
 		<p>Nv</p> 
 	</section> 
+</div>
+
+<div id="erreur">
+	<section class="message"> 
+		<p></p> 
+	</section> 
 </div> 
 
+<!--div id="tempsreel"> 
+	<span class="languette"></span> 
+	<section class="messages"> 
+	</section> 
+</div--> 
+
+<div id="debug"> 
+	<span class="titre"> 
+		Log / débug 
+	</span> 
+	<section class="messages"> 
+	</section> 
+</div>
+
 <style type="text/html" gabarit="article"> 
-	<article style="order: {{articleDate}}; background: url({{articleImage}}); background-size: cover; background-clip: border-box;"> 
+	<article style="order: {{articleDate}}; background: url('{{articleImage}}'); background-size: cover; background-clip: border-box;"> 
 		<span class="contenu"> 
 			<span class="titre"> 
 				<span class="suivi" suivi="{{articleSuiviEtat}}" articleId="{{id}}">
@@ -93,8 +132,11 @@
 				<a class="note" href="?page=notes#nouvelleNote/articleId:{{id}}"> 
 					&#128393; 
 				</a> 
+				<!--span class="extrait" articleLien="{{articleLien}}">
+					&#8682; 
+				</span--> 
 				<a class="titre" href="{{articleLien}}" target="_blank" articleId="{{id}}"> 
-					{{articleTitre}} 
+					{{articleTitre}} 	
 				</a> 
 			</span> 
 			<span class="infos"> 

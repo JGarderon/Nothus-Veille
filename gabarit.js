@@ -33,6 +33,93 @@ function Statistiques_MaJ_Page() {
 	} 
 } 
 
+/*---*/ 
+
+function ExtraireContenuPertinent(doc) { 
+	var priorites = [ 
+		[ 
+			"getElementsByTagName",
+			(element) => { return (element.length>0)?true:false; }
+		],
+		[ 
+			"#id",
+			(element) => { return (element!=null)?true:false; }
+		],
+		[ 
+			"getElementsByClassName",
+			(element) => { return (element.length>0)?true:false; }
+		] 
+	]; 
+	var determinants = {
+		"getElementsByTagName": ["article", "content"], 
+		"#id": ["page", "blog", "story", "content", "page-root", "page_root"], 
+		"getElementsByClassName": ["story", "blog", "article", "content", "contenu", "content", "page_content", "page_article", "page_root", "post"] 
+	} 
+	var r = {}; 
+	for(var fct in determinants) { 
+		items = determinants[fct]; 
+		r[fct] = items.map( 
+			(el_cherche, index, els_cherche) => { 
+				if (fct!="#id") { 
+					return doc.body[fct](el_cherche); 
+				} else { 
+					return doc.getElementById(el_cherche); 
+				} 
+			} 
+		); 
+	} 
+	for (var i=0; i<priorites.length; i++) { 
+		var _r = r[priorites[i][0]].filter( 
+			priorites[i][1] 
+		); 
+		if (_r.length>0) 
+			return _r; 
+	} 
+	return false; 
+}; 
+
+/*var elC = ExtraireContenuPertinent(); 
+if (elC!=false) 
+	console.log( 
+		elC
+	); */
+
+/*---*/ 
+
+function Article_extrait(evt) { 
+	Chargement(true); 
+	var xhr = new XMLHttpRequest(); 
+	xhr.onreadystatechange = () => { 
+		if (xhr.readyState === XMLHttpRequest.DONE) { 
+			if (xhr.status==200) { 
+				try { 
+					console.log(xhr.response); 
+					var extraits = ExtraireContenuPertinent( 
+						new DOMParser().parseFromString( 
+							xhr.response, 
+							"text/html" 
+						) 
+					); 
+					document.querySelector("#extrait").innerText = extraits[0][0].innerText; 
+					console.log(extraits[0][0].outerHTML); 
+					document.querySelector("#extrait").style.display = "flex"; 
+				} catch(e) { 
+					alert("La ressource distante n'a pas pu être traitée correctement."); 
+				}
+				Chargement(false); 
+			} else { 
+				alert("La ressource distante n'est pas disponible."); 
+				Chargement(false); 
+			} 
+		} 
+	} 
+	xhr.open( 
+		"GET", 
+		evt.target.getAttribute("articleLien") 
+	);
+	xhr.send(); 
+} 
+
 function Article_affichage_lancer() { 
 	if (window.Article_intervale==null)
 		window.Article_intervale = setInterval( 
@@ -93,15 +180,13 @@ function Article_afficher_preparation(objArticle) {
 		objArticle.articleImageBlob!=="" 
 	& 
 		objArticle.articleImageBlob!==false 
-	)
-		objArticle.articleImage = URL.createObjectURL( 
-			new Blob( 
-				[objArticle.articleImageBlob], 
-				{ 
-					"type": objArticle.articleImageBlob.type 
-				} 
-			) 
+	) { 
+		var blobURL = window.URL.createObjectURL( 
+			objArticle.articleImageBlob 
 		); 
+		objArticle.articleImage = blobURL; 
+		window.ImagesBlog[blobURL] = objArticle.articleImageBlob; 
+	}; 
 	objArticle.infoVues = (objArticle.articleVues.toString()+" vue"+((objArticle.articleVues>1)?"s":"")); 
 	objArticle.fluxTitre = objArticle["flux.titre"]; 
 	objArticle.articleSuiviEtat = (objArticle.articleSuivi)?"oui":"non"; 
@@ -119,6 +204,12 @@ function Article_afficher_preparation(objArticle) {
 } 
 
 function Article_afficher_evenement(objHTML) { 
+	try { 
+		objHTML.querySelector(".extrait").addEventListener( 
+			"click", 
+			Article_extrait 
+		); 
+	} catch(e) {} 
 	objHTML.querySelector(".suivi").addEventListener( 
 		"click", 
 		(evt) => { 
@@ -314,6 +405,13 @@ function __chargement_gabarit__(evt) {
 		} 
 	); 
 
+	document.querySelector("#extrait span.action a").addEventListener( 
+		"click", 
+		(evt) => { 
+			document.querySelector("#extrait").style.display = "none"; 
+		} 
+	); 
+
 	window.Articles_date_debut = 0; 
 	window.Articles_date_fin = null; 
 
@@ -326,11 +424,19 @@ function __chargement_gabarit__(evt) {
 	); 
 	window.Article_elA.style.display = "none"; 
 	window.Article_gabarit = Gabarit_retrouver("article"); 
-
-	self.indexedDB.open(
-		"Nothus-RSS", 
-		window.BDD_version 
-	).onsuccess = (evtBDD) => { 
+	var r = window.indexedDB.open(
+		"Nothus-RSS" 
+	); 
+	r.onupgradeneeded = (evtBDD) => { 
+		console.log("besoin"); 
+	}; 
+	r.onerror = (evtBDD) => { 
+		console.log("erreur"); 
+	}; 
+	r.onblocked = (evtBDD) => { 
+		console.log("bloqué"); 
+	}; 
+	r.onsuccess = (evtBDD) => { 
 		window.db = evtBDD.target.result; 
 		Statistiques_MaJ_Page(); 
 		Vue_preparer( 

@@ -221,4 +221,37 @@ input[type="checkbox"] {
 	font-size: 80%; 
 	font-style: italic;
 } 
+
+/*---*/ 
+
+#debug { 
+	overflow-y: auto; 
+	position: fixed; 
+	bottom: 0px; 
+	right: 0px;  
+	width: 33%; 
+	max-height: 33%; 
+	font-size: 80%; 
+} 
+
+#debug[debug="ferme"] { 
+	display: none; 
+} 
+
+#debug span.titre { 
+	display: block; 
+	margin: 0.15rem; 
+	padding: 0.25rem; 
+	font-weight: 900;  
+	color: #333;
+	background: rgba(255, 182, 193, 1); 
+} 
+
+#debug p { 
+	margin: 0.15rem; 
+	padding: 0.25rem; 
+	color: #fff;
+	background: rgba(255, 105, 180, 1); 
+} 
+
 /*---*/ 

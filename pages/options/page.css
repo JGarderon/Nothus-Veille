@@ -1,0 +1,90 @@
+
+#page { 
+	display: block; 
+	width: 100%;
+	max-width: 35rem; 
+	margin: auto;
+	padding: 2rem; 
+	text-align: justify; 
+} 
+
+#page .titraille[important] { 
+	background: transparent; 
+	animation: titrailleImportante 1.0s infinite ease-in-out;
+} 
+
+@keyframes titrailleImportante {
+	50%  { 
+		background: orange; 
+	} 
+} 
+
+*[etat=attente] { 
+	opacity: 0.25; 
+} 
+
+*[etat=nul] { 
+	opacity: 0.75; 
+	color: #FF4500; 
+} 
+
+*[etat=correct] { 
+	display: block; 
+	margin-bottom: 0.25rem; 
+	padding: 0.25rem; 
+	opacity: 0.75; 
+	color: #fff; 
+	background: #556B2F; 
+} 
+
+*[etat=incorrect] { 
+	display: block; 
+	margin-bottom: 0.25rem; 
+	padding: 0.25rem; 
+	opacity: 0.75; 
+	color: #fff; 
+	background: #B22222; 
+} 
+
+
+
+#page form { 
+	padding: 0.25rem;
+	text-align: center; 
+	border: solid 0.05rem rgba(0, 0, 0, 0.25); 
+} 
+#page form+form { 
+	margin-top: 0.25rem; 
+} 
+
+fieldset { 
+	margin: 0rem;
+	padding: 0.25rem;
+	border: 0px;
+	border-top: solid 0.05rem rgba(0, 0, 0, 0.25); 
+} 
+fieldset legend { 
+	margin: 0rem;
+	padding: 0.25rem;
+	text-align: center; 
+	color: rgba(0, 0, 0, 0.25); 
+} 
+#page input { 
+	width: 100%; 
+	margin: 0rem;
+	padding: 0rem; 
+	border: 0px; 
+	background: #fff; 
+	color: rgba(0, 0, 0, 0.75);
+} 
+#page input[type=submit] { 
+	width: 100%; 
+	margin-top: 0.25rem; 
+	padding: 0.5rem; 
+	font-size: 80%; 
+	color: #fff; 
+	background: rgba(0, 0, 0, 0.75);
+} 
+
+
+

@@ -355,7 +355,7 @@ function Nettoyage_lancer(jours) {
 						); 
 					} 
 				); 
-				ul.appendChild( 
+				liste.appendChild( 
 					li 
 				); 
 				nbre++; 

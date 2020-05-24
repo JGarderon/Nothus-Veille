@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+	<meta charset="utf-8">
+	<title>Nothus-Veille - Bienvenue</title> 
+	<link href="./bienvenue.css" rel="stylesheet" type="text/css" /> 
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no"> 
+</head>
+<body> 
+
+<header> 
+	<span class="conteneur"> 
+		<h1> 
+			Nothus-Veille 
+		</h1>
+		<h2> 
+			... un simple lecteur de flux RSS, et plein d'autres choses 
+		</h2> 
+		<p> 
+			En ce moment-même, les premiers scripts sont en cours de création des bases, de récupération des contenus, de préparation de ce que sera l'outil. C'est une affaire de quelques secondes : si tout va bien, la simple lecture de ces lignes a suffit à vous faire attendre :) 
+		</p> 
+		<p> 
+			Cependant prenez-le temps tout de même le temps de descendre un peu plus bas dans la page, afin de connaître tout ce que vous offre cet outil récemment installé ou mis à jour grâce aux notes de version.
+		</p> 
+	</span> 
+</header> 
+
+<div id="page"> 
+
+	<span class="conteneur"> 
+
+		<span class="version" majeur="non"> 
+			<p> 
+				Lot / Version 1.2.*<br /> 
+				- retour de l'enregistrement local des images jointes aux articles, stockées localement ; <br /> 
+				- corrections d'erreurs mineures mais visuellement gênantes ou empêchant une navigation correcte dans les pages du module ;<br /> 
+				- les pages qui n'existent pas sont désormais renvoyées vers la page d'accueil après un message d'avertissement. 
+			</p> 
+		</span> 
+
+		<span class="version" majeur="non"> 
+			<p> 
+				Lot / Version 1.2.*<br /> 
+				- retour de l'enregistrement local des images jointes aux articles, stockées localement. Par ailleurs une erreur logique dans la récupération des images d'articles a été réparée (la boucle s'arrêtait au premier champ vide trouvé, le comportement était  aléatoire) ; <br /> 
+				- corrections d'erreurs mineures mais visuellement gênantes ou empêchant une navigation correcte dans les pages du module ;<br /> 
+				- les pages qui n'existent pas sont désormais renvoyées vers la page d'accueil après un message d'avertissement ;<br />  
+				- un bug dans les versions précédente avait provoqué la mise à l'arrêt dans l'option de la récupération des flux. Le module, sans erreur, ne se mettait plus à jour. Désormais il force l'état des flux à True pour la mise à jour.<br /> 
+			</p> 
+		</span> 
+
+		<span class="version" majeur="oui"> 
+			<p> 
+				Version 1.2<br /> 
+				- page de bienvenue et récupération de l'état d'installation ou de mise à jour du module ;<br /> 
+				- point d'accès unique à la base pour les routines et meilleure gestion des mises à jour ;<br /> 
+				- réduction du nombre de scripts en arrière-plan (optimisation des performances). Arrêt temporaire de l'ajout de la récupération des vignettes ;<br /> 
+				- correction des bugs récurrents pour la variable <i>browser</i> entre Mozilla Firefox et Google Chrome. 
+			</p> 
+		</span> 
+
+		<span class="version" majeur="non"> 
+			<p> 
+				Lot / Version 1.1.6.*<br /> 
+				- désormais plusieurs petites versions (des "lots") peuvent se succéderer en quelques heures afin de garantir un maximum de stabilité en corrigeant des imperfections ou en suivant au plus près les principales mises à jour, souvent complexes à mettre en oeuvre ;<br /> 
+				- versions multiples, afin d'assurer la transition vers la prochaine version majeure. 
+			</p> 
+		</span>  
+
+		<span class="version" majeur="oui"> 
+			<p> 
+				Version 1.1.5<br /> 
+				- implémentation des outils de création de notes et de publication de rapports, en stade alpha. 
+			</p> 
+		</span>  
+
+		<span class="version" majeur="non"> 
+			<p> 
+				Version 1.1.4<br /> 
+				- la version 1.1.3, plus spécifique au lancement du portage du module sur Google Chrome et publiée pour Firefox, est abandonnée ;<br /> 
+				- corrections générales de incompatibilités trouvées entre Google Chrome et Firefox. 
+			</p> 
+		</span> 
+
+		<span class="version" majeur="oui"> 
+			<p> 
+				Version 1.1.3<br /> 
+				- portage du module sous Google Chrome avec le statut "alpha". 
+			</p> 
+		</span> 
+
+		<span class="version" majeur="non"> 
+			<p> 
+				Version 1.1.2<br /> 
+				- correction (retour à l'origine) dans l'algo de tri des articles pour l'affichage par le lecteur ;<br /> 
+				- correction d'une erreur dans la gestion des clics du header. 
+			</p> 
+		</span> 
+
+		<span class="version" majeur="non"> 
+			<p> 
+				Version 1.1.1<br /> 
+				- (débug) lors de l'ajout d'un flux, le formulaire ne revenait pas à son opacité normale après l'enregistrement et aucun message n'apparaissait ;<br /> 
+				- (débug) la titraille pour l'insertion des flux par défaut, ne répondait pas au clic ; <br /> 
+				- (débug) l'ajout de secteur ne se faisait pas correctement (clé flux absente de l'objet Secteur à insérer). Causait des problèmes lors de l'affichage des secteurs lors de l'édition des flux, car la générations des items pour la jonction ne fonctionnait pas. 
+			</p> 
+		</span> 
+
+		<span class="version" majeur="oui"> 
+			<p> 
+				Version 1.1.0<br /> 
+				- sortie du mode "expérimental" et début de la phase de pré-production ;<br /> 
+				- toutes les pages ont été réorganisées et le gabarit XML est pleinement opérationel ;<br /> 
+				- les flux peuvent être regroupés par "secteur" ;<br /> 
+				- les recherches sont sauvegardés sous forme de "vues", utilisées pour lire la base de données dans le lecteur (paramètrage fin possibles). Les vues sont composées d'un ou plusieurs secteurs ;<br /> 
+				- une amélioration globale des performances, et de nombreux débugs ;<br /> 
+				- des centaines de flux (dont toute la presse quotidienne locale française) disponibles d'un clic. 
+			</p> 
+		</span> 
+
+
+		<span class="version" majeur="non"> 
+			<p> 
+				Version 1.0.6<br /> 
+				- Debug de la partie "récupérateur" et fin du développement de l'outil d'importation et d'exportation des OPML avec gestion des erreurs ;<br /> 
+				- Debug du récupérateur automatique de flux, avec un correction des URLs ;<br /> 
+				- Améliorations graphiques de la partie "récupérateur" et "aide" ;<br /> 
+				- Premiers tests sur la stabilité avec plusieurs centaines de flux récupérés. 
+			</p> 
+		</span> 
+
+		<span class="version" majeur="oui"> 
+			<p> 
+				Version 1.0.5<br /> 
+				- le module a été entièrement repensé pour être plus facilement développable et maintenable. Un outil de gabarisation de pages en XML a été développé pour l'occasion, dans le respect des règles des webExtensions ;<br /> 
+				- la découverte et l'inscription automatique (et transparent) de flux RSS lors de votre navigation sur le net opérationnel ;
+				- le système d'extraction du contenu pertinent des pages d'articles RSS, est en phase de déploiement (inactif pour l'utilisateur).<br /> 
+			</p> 
+		</span> 
+
+		<span class="version" majeur="non"> 
+			<p> 
+				Version 1.0.4<br /> 
+				... la version a été abandonnée ! 
+			</p> 
+		</span> 
+
+		<span class="version" majeur="non"> 
+			<p> 
+				Version 1.0.3<br /> 
+				- mise en cache sans détérioration des performances (grâce à un webWorker) des images des articles ;<br /> 
+				- préfiguration du prochain système de ressources stocké en local / mis en cache. 
+			</p> 
+		</span> 
+
+		<span class="version" majeur="non"> 
+			<p> 
+				Version 1.0.2<br /> 
+				- diverses corrections notamment dans le chargement des données d'installation ;<br /> 
+				- correction d'un bug d'une faille de sécurité sur les caractères HTML contenus dans les articles de flux (type "<" ou ">"). Toutes les balises HTML sont désormais détectées et supprimées ;<br /> 
+				- un système de tâches est implémenté pour gérer les activités périodiques ;<br /> 
+				- un système de journalisation pour le suivi des événements est opérationnel et en cours de déploiement ;<br /> 
+				- un système d'exportation de flux OPML est désormais disponible (l'importation est à venir). 
+			</p> 
+		</span> 
+
+		<span class="version" majeur="non"> 
+			<p> 
+				Version 1.0.1<br /> 
+				- correction d'un bug sur le nombre d'articles trouvés ;<br /> 
+				- correction d'un oubli avec l'ajout d'un bouton pour le suivi des articles (un article suivi ne sera pas effacé en cas de nettoyage) ;<br /> 
+				- optimisation avec la mise par défaut à inactif d'un flux dont l'URL renvoie à une erreur HTTP ; un état est désormais gardé dans toutes les situations ;<br /> 
+				- optimisation avec un nouvel onglet ouvert désormais pour les articles cliqués ;<br /> 
+				- ajout d'un compteur de vues pour les liens d'articles cliqués ;<br /> 
+				- optimisation de la recherche avec la suppression de l'option "multilignes" pour les expressions régulières, au profit de la seule insensibilité à la casse ;<br /> 
+				- optimisation graphique avec la suppression des paragraphes descriptifs pour les champs du formulaire de l'outil de recherche du lecteur. 
+			</p> 
+		</span> 
+
+		<span class="version" majeur="oui"> 
+			<p> 
+				Version 1.0.0 :<br /> 
+				Le module fonctionne avec Firefox pour Android 48.0 et supérieures, Firefox 42.0 et supérieures. 
+			</p> 
+		</span> 
+
+	</span> 
+
+</div> 
+
+</body>
+</html> 
