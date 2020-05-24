@@ -80,21 +80,21 @@ self.browser = (typeof self.browser=="undefined")?
 	self.browser 
 ; 
 
-browser.runtime.onInstalled.addListener( 
-	(evt) => { 
-		browser.tabs.create( 
-			{ 
-				"url": browser.runtime.getURL( 
-					"./bienvenue.html" 
-				) 
-			} 
-		); 
-		notifier( 
-			`Nothus-Veille : module installé ou mis à jour`, 
-			`Votre module a été mis à jour. Les informations mettront peut-être quelques instants à s'afficher.`
-		); 
-	}
-); 
+// browser.runtime.onInstalled.addListener( 
+// 	(evt) => { 
+// 		browser.tabs.create( 
+// 			{ 
+// 				"url": browser.runtime.getURL( 
+// 					"./bienvenue.html" 
+// 				) 
+// 			} 
+// 		); 
+// 		notifier( 
+// 			`Nothus-Veille : module installé ou mis à jour`, 
+// 			`Votre module a été mis à jour. Les informations mettront peut-être quelques instants à s'afficher.`
+// 		); 
+// 	}
+// ); 
 
 browser.runtime.onUpdateAvailable.addListener(
 	(details) => { 
@@ -136,28 +136,28 @@ function notifier(titre, message) {
     });
 } 
 
-function TEMPORAIRE_envoi_debug(item) { 
-	// pour triage ; cf màj automatique pour OPML 
-	// à supprimer pour la version publique 
-	xhr = new XMLHttpRequest(); 
-	xhr.onreadystatechange  = () => {}; 
-	xhr.open( 
-		"POST", 
-		"http://veille.nothus.fr", 
-		true 
-	); 
-	xhr.setRequestHeader( 
-		"Content-Type", 
-		"application/x-www-form-urlencoded" 
-	); 
-	xhr.send( 
-		"item="+encodeURIComponent( 
-			JSON.stringify( 
-				item 
-			) 
-		) 
-	); 
-} 
+// function TEMPORAIRE_envoi_debug(item) { 
+// 	// pour triage ; cf màj automatique pour OPML 
+// 	// à supprimer pour la version publique 
+// 	xhr = new XMLHttpRequest(); 
+// 	xhr.onreadystatechange  = () => {}; 
+// 	xhr.open( 
+// 		"POST", 
+// 		"http://veille.nothus.fr", 
+// 		true 
+// 	); 
+// 	xhr.setRequestHeader( 
+// 		"Content-Type", 
+// 		"application/x-www-form-urlencoded" 
+// 	); 
+// 	xhr.send( 
+// 		"item="+encodeURIComponent( 
+// 			JSON.stringify( 
+// 				item 
+// 			) 
+// 		) 
+// 	); 
+// } 
 
 function gerer_action_fluxTmpAjouter(items) { 
 	var nbre = 0; 
@@ -170,13 +170,13 @@ function gerer_action_fluxTmpAjouter(items) {
 			fluxTmpTous[flux.url] = flux; 
 			nbre++; 
 		} 
-		try { 
-			TEMPORAIRE_envoi_debug( 
-				items[i]
-			); 
-		} catch(e) { 
-			console.log("TEMPORAIRE_envoi_debug", e); 
-		} 
+		// try { 
+		// 	TEMPORAIRE_envoi_debug( 
+		// 		items[i]
+		// 	); 
+		// } catch(e) { 
+		// 	console.log("TEMPORAIRE_envoi_debug", e); 
+		// } 
 	} 
 	self.localStorage.setItem( 
 		"RSS.flux.temporaires", 
